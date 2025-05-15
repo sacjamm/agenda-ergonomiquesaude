@@ -1,0 +1,7 @@
+{
+  "name": "Agenda Ergonomiquesaude",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

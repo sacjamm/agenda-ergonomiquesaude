@@ -10,30 +10,31 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-no-padding">
+<ion-content class="ion-padding">
 
-  <ion-select 
-  fill="outline" 
-  label="Selecionar agenda *" 
-  label-placement="floating" 
-  placeholder="Escolha uma agenda" 
-  [(ngModel)]="profissionalSelecionado" 
-  (ionChange)="onProfissionalChange()">
+  <ion-select fill="outline" label="Selecionar agenda *" label-placement="floating" placeholder="Escolha uma agenda"
+    [(ngModel)]="profissionalSelecionado" (ionChange)="onProfissionalChange()">
     <ion-select-option *ngFor="let profissional of profissionais" [value]="profissional.id">
-     Agenda - {{ profissional.id }}
+      Agenda - {{ profissional.id }}
     </ion-select-option>
   </ion-select>
-
-  <ion-datetime
-    *ngIf="datasDisponiveis.length > 0"
-    presentation="date"
-    [min]="minDataDisponivel"
-    [max]="maxDataDisponivel"
-    [isDateEnabled]="isDateEnabled"
-    [(ngModel)]="dataSelecionada"
-    label="Escolha a data"
-    label-placement="floating"
+<br>
+  <ion-datetime *ngIf="datasDisponiveis.length > 0" presentation="date" [min]="minDataDisponivel"
+    [max]="maxDataDisponivel" [isDateEnabled]="isDateEnabled" [(ngModel)]="dataSelecionada"
+    (ionChange)="onDataSelecionada()" label="Escolha a data" label-placement="floating"
     placeholder="Selecione uma data disponível">
   </ion-datetime>
+<br>
+  <ion-select
+  *ngIf="horariosDisponiveis.length > 0"
+  fill="outline"
+  label="Horário disponível *"
+  label-placement="floating"
+  placeholder="Escolha um horário"
+  [(ngModel)]="horarioSelecionado">
+  <ion-select-option *ngFor="let horario of horariosDisponiveis" [value]="horario.id">
+    {{ horario.hora }} - {{ horario.turno }}
+  </ion-select-option>
+</ion-select>
 
-</ion-content> 
+</ion-content>

@@ -13,6 +13,7 @@ export class FolderPage implements OnInit {
   public folder!: string;
   public isColaborador = false;
   public isAdmin = false;
+  public isProfissional = false;
   public possuiAgenda = false;
 
   private activatedRoute = inject(ActivatedRoute);
@@ -28,13 +29,20 @@ export class FolderPage implements OnInit {
       this.isColaborador = true;
       this.possuiAgenda = await this.verificaExisteAgendamento(userLogado.id);
       this.isAdmin = false;
+      this.isProfissional = false;
     } else if (userLogado?.nivel === 'admin') {
       this.isColaborador = false;
       this.isAdmin = true;
-    } else {
+      this.isProfissional = false;
+    } else if(userLogado?.nivel === 'funcionario'){
       this.isColaborador = false;
       this.isAdmin = false;
-    }
+      this.isProfissional = true;
+    }else {
+      this.isColaborador = false;
+      this.isAdmin = false;
+      this.isProfissional = false;
+    } 
   }
 
   async verificaExisteAgendamento(user_id: number) {

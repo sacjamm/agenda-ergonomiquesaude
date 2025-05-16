@@ -1,0 +1,43 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-back-button style="display: inline;" defaultHref="/folder/inbox"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Adicionar Disponibilidade</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+<ion-item [class.invalid]="formSubmetido && !profissionalSelected" 
+lines="none" class="ion-no-padding no-border">
+
+  <ion-select fill="outline" label="Selecione um profissional *" label-placement="floating" placeholder="Profissional para atendimento"
+    [(ngModel)]="profissionalSelected" (ionChange)="onProfissionalChange($event)">
+    <ion-select-option *ngFor="let profissional of profissionais" [value]="profissional.id">
+      {{ profissional.name }}
+    </ion-select-option>
+  </ion-select>
+
+</ion-item>
+ <br>
+  <ion-input fill="outline" [(ngModel)]="empresaSearch" 
+  label="Buscar empresa *" label-placement="floating"
+            placeholder="Digite o CNPJ ou a Razão Social" 
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false" (ionInput)="buscarEmpresas($event)"
+             clearInput></ion-input>
+      
+
+        <ion-list *ngIf="empresasFiltradas.length > 0 && !empresaSelecionada">
+          <ion-item *ngFor="let empresa of empresasFiltradas" (click)="selecionarEmpresa(empresa)">
+            {{ empresa.razao_social }} - {{ empresa.cnpj }}
+          </ion-item>
+        </ion-list>
+        <ion-input type="hidden" [(ngModel)]="empresa_id" [value]="empresa_id"></ion-input>
+  
+</ion-content>

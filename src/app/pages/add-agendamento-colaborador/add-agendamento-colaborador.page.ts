@@ -22,7 +22,9 @@ export class AddAgendamentoColaboradorPage implements OnInit {
 
   minDataDisponivel: string = '';
   maxDataDisponivel: string = '';
-  //isDateEnabled: string[] = [];
+
+  public horariosDisponiveis: any[] = [];
+  public horarioSelecionado: string | null = null;
 
   constructor(
     private preferencesService: PreferencesService,
@@ -80,6 +82,7 @@ export class AddAgendamentoColaboradorPage implements OnInit {
     const response = await fetch('https://api.ergonomiquesaude.com.br/api/agenda/agenda.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      mode: 'cors',
       body: JSON.stringify({
         action: 'listar_datas_disponiveis',
         empresa_id: this.empresa_id,
@@ -101,6 +104,41 @@ export class AddAgendamentoColaboradorPage implements OnInit {
     }
   }
 
+  async onDataSelecionada() {
+    this.horariosDisponiveis = [];
+    this.horarioSelecionado = null;
+
+    if (!this.dataSelecionada || !this.profissionalSelecionado) return;
+
+    // Descobre o disponibilidade_id da data selecionada
+    //const disponibilidade = this.datasDisponiveis.find(d => d.data === this.dataSelecionada.split('T')[0]);
+
+    const dataSelecionadaStr = this.dataSelecionada ? this.dataSelecionada.split('T')[0] : '';
+    const disponibilidade = this.datasDisponiveis.find(d => d.data === dataSelecionadaStr);
+    if (!disponibilidade) return;
+
+    console.log(disponibilidade);
+    console.log(this.empresa_id);
+    console.log(this.profissionalSelecionado);    
+
+    const response = await fetch('https://api.ergonomiquesaude.com.br/api/agenda/agenda.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      mode: 'cors',
+      body: JSON.stringify({
+        action: 'listar_horarios_disponiveis',
+        empresa_id: this.empresa_id,
+        profissional_id: this.profissionalSelecionado,
+        disponibilidade_id: disponibilidade.id,
+        data: disponibilidade.data
+      })
+    });
+    const data = await response.json();
+    if (data.status === 200 && data.horas) {
+      this.horariosDisponiveis = data.horas;
+    }
+  }
+
   // Gera todas as datas entre min e max para desabilitar as não disponíveis
   getAllDatesBetween(start: string, end: string): string[] {
     const dates = [];
@@ -114,8 +152,20 @@ export class AddAgendamentoColaboradorPage implements OnInit {
   }
 
   public isDateEnabled = (dateIsoString: string): boolean => {
-  // datasDisponiveis deve conter as datas no formato 'YYYY-MM-DD'
-  const date = dateIsoString.split('T')[0];
-  return this.datasDisponiveis.some(d => d.data === date);
-};
+    // datasDisponiveis deve conter as datas no formato 'YYYY-MM-DD'
+    const date = dateIsoString.split('T')[0];
+    return this.datasDisponiveis.some(d => d.data === date);
+  };
+
+  /*public isDateEnabled = (dateIsoString: string): boolean => {
+      const date = dateIsoString.split('T')[0];
+      const hoje = new Date();
+      const dataSelecionada = new Date(date);
+  
+      // Permite apenas datas disponíveis e que não sejam anteriores a hoje
+      const disponivel = this.datasDisponiveis.some(d => d.data === date);
+      const naoPassou = dataSelecionada >= new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+  
+      return disponivel && naoPassou;
+    };*/
 }

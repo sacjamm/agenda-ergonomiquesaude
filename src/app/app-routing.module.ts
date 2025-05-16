@@ -26,6 +26,14 @@ const routes: Routes = [
     path: 'add-agendamento-colaborador',
     loadChildren: () => import('./pages/add-agendamento-colaborador/add-agendamento-colaborador.module').then( m => m.AddAgendamentoColaboradorPageModule),
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'add-disponibilidade',
+    loadChildren: () => import('./pages/add-disponibilidade/add-disponibilidade.module').then( m => m.AddDisponibilidadePageModule)
+  },
+  {
+    path: 'listar-disponibilidades',
+    loadChildren: () => import('./pages/listar-disponibilidades/listar-disponibilidades.module').then( m => m.ListarDisponibilidadesPageModule)
   }
 ];
 

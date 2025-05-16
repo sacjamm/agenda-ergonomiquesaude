@@ -15,7 +15,7 @@
       <ion-icon class="icone-calendario" name="today" *ngIf="!possuiAgenda"></ion-icon>
       <p class="p-calendario" *ngIf="!possuiAgenda">Se você ainda não agendou</p>
 
-      <ion-button expand="full" size="large" routerLink="/add-agendamento-colaborador" *ngIf="!possuiAgenda">
+      <ion-button size="large" routerLink="/add-agendamento-colaborador" *ngIf="!possuiAgenda">
         <ion-icon slot="start" name="add"></ion-icon>
         <ion-label>Agendar consulta</ion-label>
       </ion-button>
@@ -23,6 +23,18 @@
       <ion-button size="large" routerLink="/listar-agendamentos-colaborador" *ngIf="possuiAgenda">
         <ion-icon slot="start" name="calendar"></ion-icon>
         <ion-label>Meus Agendamentos</ion-label>
+      </ion-button>
+    </div>
+
+    <div *ngIf="isAdmin">
+      
+      <ion-button size="large" routerLink="/listar-disponibilidades">
+        <ion-icon slot="start" name="calendar"></ion-icon>
+        <ion-label>Listar Disponibilidades</ion-label>
+      </ion-button>
+      <ion-button size="large" routerLink="/add-disponibilidade">
+        <ion-icon slot="start" name="add"></ion-icon>
+        <ion-label>Adicionar Disponibilidade</ion-label>
       </ion-button>
     </div>
 

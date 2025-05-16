@@ -1,0 +1,10 @@
+ion-item {
+  --inner-padding-end: 0px !important;
+}
+ion-item.invalid {
+  --highlight-color-focused: red;
+  --border-color: red;
+  border: 1px solid red;
+  border-radius: 6px;
+  --inner-padding-end: 0px !important;
+}

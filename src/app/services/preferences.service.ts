@@ -35,6 +35,7 @@ export class PreferencesService {
   async logout(): Promise<void> {
     await this.remove('token');
     await this.remove('usuario');
+    await this.remove('login_data');
     // Adicione outros dados que desejar limpar no logout
   }
 

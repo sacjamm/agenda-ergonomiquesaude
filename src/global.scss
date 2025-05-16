@@ -36,6 +36,28 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
 
+ion-app {
+    width: 100%;
+    margin: 0 auto;
+}
+
+@media (min-width: 481px) {
+    ion-app {
+        max-width: 480px;
+    }
+}
+
+ion-header {
+    ion-toolbar {
+        ion-menu-button.in-toolbar {
+            color: #fff !important;
+        }
+
+        --background: #54acb4 !important;
+        --color: #fff !important;
+    }
+}
+
 ion-button.button-solid {
     --background: #54acb4 !important;
 }

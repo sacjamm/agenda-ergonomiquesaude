@@ -1,0 +1,39 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-back-button style="display: inline;" defaultHref="/listar-agendamentos-colaborador"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Agendar Consulta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-no-padding">
+
+  <ion-select 
+  fill="outline" 
+  label="Selecionar agenda *" 
+  label-placement="floating" 
+  placeholder="Escolha uma agenda" 
+  [(ngModel)]="profissionalSelecionado" 
+  (ionChange)="onProfissionalChange()">
+    <ion-select-option *ngFor="let profissional of profissionais" [value]="profissional.id">
+     Agenda - {{ profissional.id }}
+    </ion-select-option>
+  </ion-select>
+
+  <ion-datetime
+    *ngIf="datasDisponiveis.length > 0"
+    presentation="date"
+    [min]="minDataDisponivel"
+    [max]="maxDataDisponivel"
+    [isDateEnabled]="isDateEnabled"
+    [(ngModel)]="dataSelecionada"
+    label="Escolha a data"
+    label-placement="floating"
+    placeholder="Selecione uma data disponível">
+  </ion-datetime>
+
+</ion-content> 

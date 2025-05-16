@@ -57,7 +57,7 @@ export class LoginPage implements OnInit {
         await this.preferencesService.set('login_data', data);
         const userLogado = await this.preferencesService.getUsuarioLogado();
         console.log(userLogado);
-         alert('Login realizado com sucesso!');
+         alert(data.message || 'Login realizado com sucesso!');
         this.router.navigate(['/folder/inbox']);
         
       } else {

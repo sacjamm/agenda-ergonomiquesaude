@@ -1,0 +1,76 @@
+ion-content {
+    ion-list {
+        ion-item-sliding {
+            box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2) !important;
+            margin-bottom: 10px !important;
+            border-left: 1px solid #54acb4 !important;
+            border-top-left-radius: 10px !important;
+            border-bottom-left-radius: 10px !important;
+        }
+
+        ion-item {
+            ion-icon.icone-calendario {
+                margin-inline-end: 15px !important;
+                color: #54acb4 !important;
+            }
+
+            ion-label {
+                p.data {
+                    font-size: 14px !important;
+                    color: #666 !important;
+                    line-height: 1 !important;
+                    margin-bottom: 2px;
+                }
+
+                p.colaborador {
+                    font-size: 13px !important;
+                    color: #555 !important;
+                }
+
+                p.profissional {
+                    font-size: 11px !important;
+                    color: #666 !important;
+                    line-height: 1 !important;
+                    margin-bottom: 2px;
+                }
+
+                p.empresa {
+                    font-size: 11px !important;
+                    color: #666 !important;
+                    line-height: 1 !important;
+                    margin-bottom: 2px;
+                }
+
+                p.status {
+                    font-size: 11px !important;
+                    line-height: 1 !important;
+                    margin-bottom: 2px;
+                }
+
+                p.agendado {
+                    color: #069 !important;
+                }
+
+                p.em_breve {
+                    color: rgb(153, 0, 145) !important;
+                }
+
+                p.expirado {
+                    color: rgb(153, 130, 0) !important;
+                }
+
+                p.realizado {
+                    color: #0a0 !important;
+                }
+
+                p.cancelado {
+                    color: rgb(153, 0, 0) !important;
+                }
+
+                ion-icon.icone-time {
+                    color: #54acb4 !important;
+                }
+            }
+        }
+    }
+}

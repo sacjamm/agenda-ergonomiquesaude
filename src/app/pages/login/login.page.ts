@@ -56,8 +56,7 @@ export class LoginPage implements OnInit {
         // Salva todos os dados retornados do endpoint
         await this.preferencesService.set('login_data', data);
         const userLogado = await this.preferencesService.getUsuarioLogado();
-        console.log(userLogado);
-         alert(data.message || 'Login realizado com sucesso!');
+        
         this.router.navigate(['/folder/inbox']);
         
       } else {

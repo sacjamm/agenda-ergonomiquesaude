@@ -21,14 +21,15 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     const userLogado = await this.preferencesService.getUsuarioLogado();
-    if (userLogado?.nivel === 'assinante' && userLogado?.agenda_funcao_usuario === 'colaborador') {
+    console.log(userLogado)
+    if (userLogado.nivel === 'assinante' && userLogado.agenda_funcao_usuario === 'colaborador') {
       this.appPages = [
         { title: 'Home', url: '/folder/inbox', icon: 'home' },
       ];
-    } else if (userLogado?.nivel === 'admin') {
+    } else if (userLogado.nivel === 'admin') {
       this.appPages = [
         { title: 'Home', url: '/folder/inbox', icon: 'home' },
-        { title: 'Disponibilidades', url: '/disponibilidades', icon: 'calendar' },
+        { title: 'Disponibilidades', url: '/listar-disponibilidades', icon: 'calendar' },
       ];
     } else {
       this.appPages = [

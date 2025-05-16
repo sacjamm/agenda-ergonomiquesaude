@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-buttons slot="end">
+    <ion-buttons slot="end"> 
       <ion-back-button style="display: inline;" defaultHref="/listar-agendamentos-colaborador"></ion-back-button>
     </ion-buttons>
     <ion-title>Agendar Consulta</ion-title>
@@ -36,5 +36,11 @@
     {{ horario.hora }} - {{ horario.turno }}
   </ion-select-option>
 </ion-select>
+
+<ion-button expand="block" size="large" (click)="salvarAgenda()" style="margin-top: 20px;"
+    [disabled]="!horariosDisponiveis.length">
+    <ion-icon slot="start" name="save"></ion-icon>
+    Agendar
+  </ion-button>
 
 </ion-content>

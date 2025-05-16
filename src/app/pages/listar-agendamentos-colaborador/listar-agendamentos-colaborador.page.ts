@@ -63,11 +63,14 @@ export class ListarAgendamentosColaboradorPage implements OnInit {
       await loading.dismiss();
       if (event) event.target.complete();
     }
-  }
+  } 
 
   getDiaSemanaPorExtenso(data: string): string {
   const dias = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-  const dataObj = new Date(data);
+  /*const dataObj = new Date(data);
+  return dias[dataObj.getDay()];*/
+  const [ano, mes, dia] = data.split('-').map(Number);
+  const dataObj = new Date(ano, mes - 1, dia); // mês começa do zero
   return dias[dataObj.getDay()];
 }
 

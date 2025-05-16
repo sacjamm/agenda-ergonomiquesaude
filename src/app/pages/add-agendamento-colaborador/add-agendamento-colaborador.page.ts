@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PreferencesService } from 'src/app/services/preferences.service';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-add-agendamento-colaborador',
@@ -13,6 +13,8 @@ export class AddAgendamentoColaboradorPage implements OnInit {
 
   public usuario_id: number = 0;
   public empresa_id: number = 0;
+  public disponibilidade_id: number = 0;
+  intervalo: number=0;
 
   datasDisponiveis: any[] = [];
   dataSelecionada: string | null = null;
@@ -29,7 +31,7 @@ export class AddAgendamentoColaboradorPage implements OnInit {
   constructor(
     private preferencesService: PreferencesService,
     private router: Router,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController, private alertController: AlertController
   ) { }
 
   async ngOnInit() {
@@ -117,9 +119,8 @@ export class AddAgendamentoColaboradorPage implements OnInit {
     const disponibilidade = this.datasDisponiveis.find(d => d.data === dataSelecionadaStr);
     if (!disponibilidade) return;
 
-    console.log(disponibilidade);
-    console.log(this.empresa_id);
-    console.log(this.profissionalSelecionado);    
+    this.disponibilidade_id = disponibilidade.id;
+    this.intervalo = disponibilidade.intervalo;
 
     const response = await fetch('https://api.ergonomiquesaude.com.br/api/agenda/agenda.php', {
       method: 'POST',
@@ -151,21 +152,88 @@ export class AddAgendamentoColaboradorPage implements OnInit {
     return dates;
   }
 
-  public isDateEnabled = (dateIsoString: string): boolean => {
+  /*public isDateEnabled = (dateIsoString: string): boolean => {
     // datasDisponiveis deve conter as datas no formato 'YYYY-MM-DD'
     const date = dateIsoString.split('T')[0];
     return this.datasDisponiveis.some(d => d.data === date);
+  };*/
+
+  public isDateEnabled = (dateIsoString: string): boolean => {
+    const date = dateIsoString.split('T')[0];
+    const hoje = new Date();
+    const dataSelecionada = new Date(date);
+
+    // Permite apenas datas disponíveis e que não sejam anteriores a hoje
+    const disponivel = this.datasDisponiveis.some(d => d.data === date);
+    const naoPassou = dataSelecionada >= new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+
+    return disponivel && naoPassou;
   };
 
-  /*public isDateEnabled = (dateIsoString: string): boolean => {
-      const date = dateIsoString.split('T')[0];
-      const hoje = new Date();
-      const dataSelecionada = new Date(date);
-  
-      // Permite apenas datas disponíveis e que não sejam anteriores a hoje
-      const disponivel = this.datasDisponiveis.some(d => d.data === date);
-      const naoPassou = dataSelecionada >= new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
-  
-      return disponivel && naoPassou;
-    };*/
+  async salvarAgenda() {
+
+    console.log(this.disponibilidade_id)
+    console.log(this.empresa_id)
+    console.log(this.profissionalSelecionado)
+    console.log(this.dataSelecionada);
+    console.log(this.horarioSelecionado);
+
+    if (
+    !this.empresa_id ||
+    !this.profissionalSelecionado ||
+    !this.dataSelecionada ||
+    !this.horarioSelecionado ||
+    !this.disponibilidade_id
+  ) {
+    this.presentAlert('Preencha todos os campos obrigatórios e selecione pelo menos um horário.');
+    return;
+  }
+
+  // Monta os dados conforme a endpoint espera
+  const payload = {
+    action: 'add_agendamento',
+    empresa_id: this.empresa_id,
+    profissional_id: this.profissionalSelecionado,
+    usuario_id: this.usuario_id,
+    disponibilidade_id: this.disponibilidade_id,
+    horario_id: this.horarioSelecionado,
+    intervalo: this.intervalo
+  };
+
+  try {
+    const response = await fetch('https://api.ergonomiquesaude.com.br/api/agenda/agenda.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      mode: 'cors',
+      body: JSON.stringify(payload)
+    });
+    const data = await response.json();
+
+    if (data.status === 200) {
+      // Limpa o formulário
+      this.empresa_id = 0;
+      this.profissionalSelecionado = 0;
+      this.horarioSelecionado = '';
+      this.disponibilidade_id=0;
+      
+      // Redireciona para a tela desejada (ajuste a rota conforme necessário)
+      this.presentAlert('Agendamento realizado com sucesso!').then(() => {
+        this.router.navigate(['/listar-agendamentos-colaborador']);
+      });
+    } else {
+      this.presentAlert(data.message || 'Erro ao salvar agendamento.');
+    }
+  } catch (error) {
+    this.presentAlert('Erro ao conectar ao servidor.');
+  }
+  }
+
+  async presentAlert(msg: string) {
+    const alert = await this.alertController.create({
+      header: 'Atenção',
+      message: msg,
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
 }

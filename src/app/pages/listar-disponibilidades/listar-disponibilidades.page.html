@@ -1,13 +1,74 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>listar-disponibilidades</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-back-button style="display: inline;" defaultHref="/folder/inbox"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Listar Disponibilidades</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">listar-disponibilidades</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="listar-disponibilidades">
+    <ion-card *ngFor="let disp of disponibilidades">
+      <ion-card-header>
+        <ion-card-title>{{ disp.razao_social }}</ion-card-title>
+        <ion-card-subtitle>{{ disp.cnpj }}</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-list>
+          <ion-item lines="none" class="ion-no-padding no-border">
+            <div class="unread-indicator-wrapper" slot="start">
+              <ion-icon color="medium" name="calendar" size="large"></ion-icon>
+            </div>
+            <ion-label>
+              <ion-text color="medium" class="ion-text-wrap">
+                Intervalo: {{ disp.intervalo_disponibilidade }} min
+              </ion-text>
+            </ion-label>
+            <div class="metadata-end-wrapper" slot="end">
+              <ion-note color="medium">
+                {{ getDiaSemanaPorExtenso(disp.data_disponibilidade) }}, {{ disp.data_disponibilidade |
+                date:'dd/MM/yyyy' }}
+              </ion-note>
+            </div>
+          </ion-item>
+
+        </ion-list>
+
+
+
+
+      </ion-card-content>
+
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button>
+            Horários
+          </ion-button>
+        </ion-buttons>
+        <ion-title>
+          Profissional: {{ disp.display_name }}
+        </ion-title>
+        <ion-buttons slot="end">
+          <ion-button>
+            <ion-icon name="trash" color="danger"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+
+    </ion-card>
+  </div>
+
+  <ion-button expand="block" (click)="carregarMais()" [disabled]="fimDaLista || carregando">
+    Carregar mais
+  </ion-button>
 </ion-content>

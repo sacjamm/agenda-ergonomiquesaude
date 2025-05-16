@@ -57,7 +57,7 @@ export class FolderPage implements OnInit {
           usuario_id: user_id,
           action: 'verificar_se_usuario_possui_agendamento'
         })
-      });
+      }); 
 
       const data = await response.json();
 

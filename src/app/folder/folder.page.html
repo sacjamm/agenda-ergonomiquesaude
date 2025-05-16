@@ -8,7 +8,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-no-padding">
+<ion-content class="ion-padding">
 
   <div id="container" [ngStyle]="{ top: !possuiAgenda ? '45%' : '30%' }">
     <div *ngIf="isColaborador">
@@ -28,13 +28,13 @@
 
     <div *ngIf="isAdmin">
       
-      <ion-button size="large" routerLink="/listar-disponibilidades">
+      <ion-button routerLink="/listar-disponibilidades" color="primary">
         <ion-icon slot="start" name="calendar"></ion-icon>
-        <ion-label>Listar Disponibilidades</ion-label>
+        <ion-label>Ver Disponibilidades</ion-label>
       </ion-button>
-      <ion-button size="large" routerLink="/add-disponibilidade">
+      <ion-button routerLink="/add-disponibilidade" color="tertiary">
         <ion-icon slot="start" name="add"></ion-icon>
-        <ion-label>Adicionar Disponibilidade</ion-label>
+        <ion-label>Add Disponibilidade</ion-label>
       </ion-button>
     </div>
 

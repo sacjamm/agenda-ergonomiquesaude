@@ -25,12 +25,18 @@ export class AddDisponibilidadePage implements OnInit {
   profissionais: any[] = [];
 
   empresaSearch: string = '';
-  horaManhaInicio:string='06:00';
-  horaManhaFim:string='12:00';
-  horaTardeInicio:string='13:00';
-  horaTardeFim:string='19:00';
+  horaManhaInicio: string = '06:00';
+  horaManhaFim: string = '12:00';
+  horaTardeInicio: string = '13:00';
+  horaTardeFim: string = '19:00';
 
   intervalo: number = 20;
+
+  datas: any[] = [];
+  horarios: any[] = [];
+
+  mostrarManha: boolean = true;
+  mostrarTarde: boolean = true;
 
   public empresasFiltradas: any[] = [];
   public empresaSelecionada: any = null;
@@ -83,7 +89,6 @@ export class AddDisponibilidadePage implements OnInit {
 
   async onProfissionalChange(event?: any) {
     this.profissionalSelected = event.detail.value;
-
     this.profissional_id = this.profissionalSelected;
     console.log(this.profissionalSelected);
   }
@@ -123,7 +128,6 @@ export class AddDisponibilidadePage implements OnInit {
   selecionarEmpresa(empresa: any) {
     this.empresa_id = empresa.id;
     this.profissional_id = this.profissionalSelected || 0;
-
     this.empresaSelecionada = empresa;
     this.empresaSearch = empresa.razao_social;
     this.empresasFiltradas = [];
@@ -131,16 +135,14 @@ export class AddDisponibilidadePage implements OnInit {
   }
 
   async aoLimparEmpresa(input: any) {
-  this.empresaSearch = '';
-  this.empresasFiltradas = [];
-  this.empresaSelecionada = null;
-  this.empresa_id = 0;
-
-  const nativeInput = await input.getInputElement();
-  nativeInput.blur(); // Remove o foco do input
-
-  console.log('Campo limpo e desfocado.');
-}
+    this.empresaSearch = '';
+    this.empresasFiltradas = [];
+    this.empresaSelecionada = null;
+    this.empresa_id = 0;
+    const nativeInput = await input.getInputElement();
+    nativeInput.blur(); 
+    console.log('Campo limpo e desfocado.');
+  }
 
   async presentAlert(msg: string) {
     const alert = await this.alertController.create({
@@ -150,5 +152,60 @@ export class AddDisponibilidadePage implements OnInit {
     });
     await alert.present();
   }
+
+  private gerarHorariosEntre(inicio: string, fim: string, intervalo: number): string[] {
+    const horarios: string[] = [];
+    let [h, m] = inicio.split(':').map(Number);
+    const [hFim, mFim] = fim.split(':').map(Number);
+
+    while (h < hFim || (h === hFim && m <= mFim)) {
+      const horaStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+      horarios.push(horaStr);
+      m += intervalo;
+      if (m >= 60) {
+        h += Math.floor(m / 60);
+        m = m % 60;
+      }
+    }
+    return horarios;
+  }
+
+  atualizarHorariosDisponiveis() {
+    if (!this.datas || this.datas.length === 0) {
+      this.horarios = [];
+      return;
+    }
+
+    let horariosGerados: any[] = [];
+
+    for (const data of this.datas) {
+      let horariosData: string[] = [];
+
+      if (this.mostrarManha) {
+        horariosData = horariosData.concat(
+          this.gerarHorariosEntre(this.horaManhaInicio, this.horaManhaFim, this.intervalo)
+        );
+      }
+      if (this.mostrarTarde) {
+        horariosData = horariosData.concat(
+          this.gerarHorariosEntre(this.horaTardeInicio, this.horaTardeFim, this.intervalo)
+        );
+      }
+
+      // Para cada horário, monte o objeto detalhado para envio posterior
+      horariosGerados = horariosGerados.concat(
+        horariosData.map(hora => ({
+          data_horarios: data,
+          hora: hora,
+          empresa_id: this.empresa_id,
+          profissional_id: this.profissional_id,
+          intervalo_hora: this.intervalo
+        }))
+      );
+    }
+
+    this.horarios = horariosGerados;
+  }
+
 
 }

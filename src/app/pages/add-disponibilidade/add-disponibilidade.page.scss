@@ -1,10 +1,28 @@
 ion-item {
   --inner-padding-end: 0px !important;
+  --background: transparent !important;
+  --background-focused: transparent !important;
+  --min-height: 68px;
 }
+
 ion-item.invalid {
   --highlight-color-focused: red;
   --border-color: red;
   border: 1px solid red;
   border-radius: 6px;
   --inner-padding-end: 0px !important;
+}
+ion-grid {
+  margin-bottom: 5px !important;
+  ion-row{
+    ion-label{
+      font-size:13px !important;
+    }
+    ion-col.col-left{
+      padding-right: 5px !important;
+    }
+    ion-col.col-right{
+      padding-left: 5px !important;
+    }
+  }
 }

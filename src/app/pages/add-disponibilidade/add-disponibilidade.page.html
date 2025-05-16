@@ -11,33 +11,83 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-<ion-item [class.invalid]="formSubmetido && !profissionalSelected" 
-lines="none" class="ion-no-padding no-border">
+  <ion-item [class.invalid]="formSubmetido && !profissionalSelected" lines="none" class="ion-no-padding no-border">
 
-  <ion-select fill="outline" label="Selecione um profissional *" label-placement="floating" placeholder="Profissional para atendimento"
-    [(ngModel)]="profissionalSelected" (ionChange)="onProfissionalChange($event)">
-    <ion-select-option *ngFor="let profissional of profissionais" [value]="profissional.id">
-      {{ profissional.name }}
-    </ion-select-option>
-  </ion-select>
+    <ion-select #inputprofissionalSelected fill="outline" label="Selecione um profissional *" label-placement="stacked"
+      placeholder="Profissional para atendimento" [(ngModel)]="profissionalSelected" name="profissionalSelected"
+      (ionChange)="onProfissionalChange($event)">
+      <ion-select-option *ngFor="let profissional of profissionais" [value]="profissional.id">
+        {{ profissional.name }}
+      </ion-select-option>
+    </ion-select>
 
-</ion-item>
- <br>
-  <ion-input fill="outline" [(ngModel)]="empresaSearch" 
-  label="Buscar empresa *" label-placement="floating"
-            placeholder="Digite o CNPJ ou a Razão Social" 
-            autocomplete="off"
-            autocorrect="off"
-            autocapitalize="off"
-            spellcheck="false" (ionInput)="buscarEmpresas($event)"
-             clearInput></ion-input>
-      
+  </ion-item>
+  <ion-text color="danger" *ngIf="formSubmetido && !profissionalSelected">
+    <p class="ion-padding-start">Campo de seleção de profissional é obrigatório.</p>
+  </ion-text>
 
-        <ion-list *ngIf="empresasFiltradas.length > 0 && !empresaSelecionada">
-          <ion-item *ngFor="let empresa of empresasFiltradas" (click)="selecionarEmpresa(empresa)">
-            {{ empresa.razao_social }} - {{ empresa.cnpj }}
-          </ion-item>
-        </ion-list>
-        <ion-input type="hidden" [(ngModel)]="empresa_id" [value]="empresa_id"></ion-input>
-  
+  <ion-text color="danger" *ngIf="formSubmetido && !empresaSearch">
+    <p class="ion-padding-start" style="font-size: 12px !important;">Campo Buscar empresa é obrigatório, digite pelo
+      menos 3 caracteres.</p>
+  </ion-text>
+  <ion-item [class.invalid]="formSubmetido && !empresaSearch" lines="none" class="ion-no-padding no-border">
+    <ion-input type="text" fill="outline" #inputempresaSearch [(ngModel)]="empresaSearch" name="empresaSearch"
+      label="Buscar empresa *" label-placement="stacked" placeholder="Digite o CNPJ ou a Razão Social"
+      autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" (ionInput)="buscarEmpresas($event)"
+      (ionClear)="aoLimparEmpresa(inputempresaSearch)" clearInput></ion-input>
+  </ion-item>
+
+  <ion-list *ngIf="empresasFiltradas.length > 0 && !empresaSelecionada">
+    <ion-item *ngFor="let empresa of empresasFiltradas" (click)="selecionarEmpresa(empresa)" lines="full">
+      {{ empresa.razao_social }} - {{ empresa.cnpj }}
+    </ion-item>
+  </ion-list>
+  <ion-input type="hidden" [(ngModel)]="empresa_id" [value]="empresa_id" style="display: none;"></ion-input>
+
+  <ion-grid class="ion-no-padding no-border">
+    <ion-row>
+      <ion-col size="6" class="col-left">
+        <ion-label>Horário inicial da manhã</ion-label>
+        <ion-input type="time" fill="outline" [(ngModel)]="horaManhaInicio" name="horaManhaInicio"></ion-input>
+      </ion-col>
+      <ion-col size="6" class="col-right">
+        <ion-label>Horário final da manhã</ion-label>
+        <ion-input type="time" fill="outline" [(ngModel)]="horaManhaFim" name="horaManhaFim"></ion-input>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid class="ion-no-padding no-border">
+    <ion-row>
+      <ion-col size="6" class="col-left">
+        <ion-label>Horário inicial da tarde</ion-label>
+        <ion-input type="time" fill="outline" [(ngModel)]="horaTardeInicio" name="horaTardeInicio"></ion-input>
+      </ion-col>
+      <ion-col size="6" class="col-right">
+        <ion-label>Horário final da tarde</ion-label>
+        <ion-input type="time" fill="outline" [(ngModel)]="horaTardeFim" name="horaTardeFim"></ion-input>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-item lines="none" class="ion-no-padding no-border">
+    <ion-select fill="outline" [(ngModel)]="intervalo" 
+    label-placement="floating" 
+    placeholder="Intervalo de Horário" 
+    label="Selecione o intervalo de horário de atendimento *">
+    <ion-select-option value="5">5 minutos</ion-select-option>
+    <ion-select-option value="10">10 minutos</ion-select-option>
+    <ion-select-option value="15">15 minutos</ion-select-option>
+    <ion-select-option value="20">20 minutos</ion-select-option>
+    <ion-select-option value="25">25 minutos</ion-select-option>
+    <ion-select-option value="30">30 minutos</ion-select-option>
+    <ion-select-option value="35">35 minutos</ion-select-option>
+    <ion-select-option value="40">40 minutos</ion-select-option>
+    <ion-select-option value="45">45 minutos</ion-select-option>
+    <ion-select-option value="50">50 minutos</ion-select-option>
+    <ion-select-option value="55">55 minutos</ion-select-option>
+    <ion-select-option value="60">60 minutos</ion-select-option>
+   </ion-select>
+  </ion-item>
+
+
 </ion-content>

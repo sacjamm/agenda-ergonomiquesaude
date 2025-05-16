@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { PreferencesService } from 'src/app/services/preferences.service';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, IonSelect, IonInput } from '@ionic/angular';
 
 @Component({
   selector: 'app-add-disponibilidade',
@@ -10,6 +10,9 @@ import { AlertController } from '@ionic/angular';
   standalone: false,
 })
 export class AddDisponibilidadePage implements OnInit {
+
+  @ViewChild('inputprofissionalSelected') inputprofissionalSelected!: IonSelect;
+  @ViewChild('inputempresaSearch') inputempresaSearch!: IonInput;
 
   public profissional_id: number = 0;
   public empresa_id: number = 0;
@@ -22,6 +25,12 @@ export class AddDisponibilidadePage implements OnInit {
   profissionais: any[] = [];
 
   empresaSearch: string = '';
+  horaManhaInicio:string='06:00';
+  horaManhaFim:string='12:00';
+  horaTardeInicio:string='13:00';
+  horaTardeFim:string='19:00';
+
+  intervalo: number = 20;
 
   public empresasFiltradas: any[] = [];
   public empresaSelecionada: any = null;
@@ -74,15 +83,19 @@ export class AddDisponibilidadePage implements OnInit {
 
   async onProfissionalChange(event?: any) {
     this.profissionalSelected = event.detail.value;
-    
+
     this.profissional_id = this.profissionalSelected;
     console.log(this.profissionalSelected);
   }
 
   async buscarEmpresas(event: any) {
-    if (this.profissionalSelected <= 0) {
+    if (!this.profissionalSelected || this.profissionalSelected <= 0) {
       this.formSubmetido = true;
+      const empresaInput = await this.inputempresaSearch.getInputElement();
+      empresaInput.blur();
+      await this.inputprofissionalSelected.open();
       this.presentAlert('Selecione um profissional primeiro.');
+      this.empresaSearch = '';
       return;
     }
     const valor = event.target.value?.trim() || '';
@@ -117,13 +130,25 @@ export class AddDisponibilidadePage implements OnInit {
     console.log(this.profissional_id);
   }
 
-  async presentAlert(msg: string) {
-  const alert = await this.alertController.create({
-    header: 'Atenção',
-    message: msg,
-    buttons: ['OK']
-  });
-  await alert.present();
+  async aoLimparEmpresa(input: any) {
+  this.empresaSearch = '';
+  this.empresasFiltradas = [];
+  this.empresaSelecionada = null;
+  this.empresa_id = 0;
+
+  const nativeInput = await input.getInputElement();
+  nativeInput.blur(); // Remove o foco do input
+
+  console.log('Campo limpo e desfocado.');
 }
+
+  async presentAlert(msg: string) {
+    const alert = await this.alertController.create({
+      header: 'Atenção',
+      message: msg,
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
 
 }

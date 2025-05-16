@@ -64,8 +64,8 @@
                 <ion-icon name="time" color="primary"
                   style="font-size: 13px !important; margin-inline: -4px 3px !important;"></ion-icon>
                 <ion-label>{{ hora.hora }}</ion-label>
-                <ion-icon name="trash" color="danger" style="font-size: 12px !important; -webkit-margin-start: 3px;
-    margin-inline-start: 3px;"></ion-icon>
+                <ion-icon name="trash" color="danger"
+                  style="font-size: 12px !important; -webkit-margin-start: 3px;margin-inline-start: 3px;"></ion-icon>
               </ion-chip>
 
             </ion-col>
@@ -74,8 +74,8 @@
                 <ion-icon name="time" color="primary"
                   style="font-size: 13px !important; margin-inline: -4px 3px !important;"></ion-icon>
                 <ion-label>{{ hora.hora }}</ion-label>
-                <ion-icon name="trash" color="danger" style="font-size: 12px !important; -webkit-margin-start: 3px;
-    margin-inline-start: 3px;"></ion-icon>
+                <ion-icon name="trash" color="danger"
+                  style="font-size: 12px !important; -webkit-margin-start: 3px;margin-inline-start: 3px;"></ion-icon>
               </ion-chip>
             </ion-col>
           </ion-row>
@@ -102,18 +102,29 @@
             Profissional: {{ disp.display_name }}
           </ion-title>
           <ion-buttons slot="end">
-            <ion-button fill="clear" size="small">
+            <ion-button fill="clear" size="small" (click)="removerDisponibilidade(disp)">
               <ion-icon name="trash" color="danger"></ion-icon>
             </ion-button>
           </ion-buttons>
         </ion-toolbar>
       </div>
-
-
     </ion-card>
   </div>
 
-  <ion-button expand="block" (click)="carregarMais()" [disabled]="fimDaLista || carregando">
+  <div *ngIf="disponibilidades.length === 0" style="
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 300px; /* ou 100%, ou outro valor que se adapte ao seu layout */
+  text-align: center;
+">
+  <ion-icon name="today" style="color:#cccccc; font-size: 180px;"></ion-icon>
+  <p class="ion-text-wrap">Não existem disponibilidades cadastradas no momento.</p>
+</div>
+
+  <ion-button expand="block" (click)="carregarMais()" *ngIf="disponibilidades.length > 0"
+    [disabled]="fimDaLista || carregando">
     Carregar mais
   </ion-button>
 </ion-content>

@@ -23,7 +23,7 @@ export class ListarAgendamentosColaboradorPage implements OnInit {
 
   async ngOnInit() {
     const userLogado = await this.preferencesService.getUsuarioLogado();
-    if (userLogado?.nivel === 'assinante' && userLogado?.agenda_funcao_usuario === 'colaborador') {
+    if (userLogado.nivel === 'assinante' && userLogado.agenda_funcao_usuario === 'colaborador') {
       this.usuario_id = userLogado.id;
       this.empresa_id = userLogado.empresa_id;
       await this.listarAgendamentos();
@@ -63,22 +63,22 @@ export class ListarAgendamentosColaboradorPage implements OnInit {
       await loading.dismiss();
       if (event) event.target.complete();
     }
-  } 
+  }
 
   getDiaSemanaPorExtenso(data: string): string {
-  const dias = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-  /*const dataObj = new Date(data);
-  return dias[dataObj.getDay()];*/
-  const [ano, mes, dia] = data.split('-').map(Number);
-  const dataObj = new Date(ano, mes - 1, dia); // mês começa do zero
-  return dias[dataObj.getDay()];
-}
+    const dias = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+    /*const dataObj = new Date(data);
+    return dias[dataObj.getDay()];*/
+    const [ano, mes, dia] = data.split('-').map(Number);
+    const dataObj = new Date(ano, mes - 1, dia); // mês começa do zero
+    return dias[dataObj.getDay()];
+  }
 
-cancelarAgendamento(agendamento: any) {
+  cancelarAgendamento(agendamento: any) {
     const confirmacao = confirm('Deseja remover o agendamento?');
     if (confirmacao) {
 
-      if(agendamento.status === 'realizado' || agendamento.status === 'expirado' || agendamento.status === 'cancelado') {
+      if (agendamento.status === 'realizado' || agendamento.status === 'expirado' || agendamento.status === 'cancelado') {
         alert('Entre em contato com o suporte para remover o agendamento.');
         this.listarAgendamentos();
         return;

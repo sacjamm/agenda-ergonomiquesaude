@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PreferencesService } from 'src/app/services/preferences.service';
 import { Router } from '@angular/router';
-import { MenuController } from '@ionic/angular';
+import { MenuController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +18,8 @@ export class LoginPage implements OnInit {
   constructor(
     private preferencesService: PreferencesService,
     private router: Router,
-    private menuCtrl: MenuController
+    private menuCtrl: MenuController,
+    private toastController: ToastController
   ) { }
 
   ionViewWillEnter() {
@@ -33,6 +34,7 @@ export class LoginPage implements OnInit {
   }
 
   async login(event: Event) {
+    await this.preferencesService.logout();
     event.preventDefault();
     this.loading = true;
 
@@ -55,18 +57,25 @@ export class LoginPage implements OnInit {
       if (data.status === 200 && data.token && data.usuario) {
         // Salva todos os dados retornados do endpoint
         await this.preferencesService.set('login_data', data);
-        const userLogado = await this.preferencesService.getUsuarioLogado();
-        
-        this.router.navigate(['/folder/inbox']);
+              window.location.href = '/folder/inbox';
+        //this.router.navigate(['/folder/inbox']);
         
       } else {
-        alert(data.message || 'E-mail/Usuário ou senha inválidos.');
+        this.presentToast(data.message || 'E-mail/Usuário ou senha inválidos.', 'danger');
       }
     } catch (error) {
-      alert('Erro ao conectar ao servidor.');
+      this.presentToast('Erro ao conectar ao servidor.', 'danger');
     } finally {
       this.loading = false;
     }
   }
-
+async presentToast(message: string, color: string = 'primary') {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2500,
+      color,
+      position: 'top'
+    });
+    return toast.present();
+  }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PreferencesService } from 'src/app/services/preferences.service';
 import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-listar-disponibilidades',
@@ -29,18 +30,19 @@ export class ListarDisponibilidadesPage implements OnInit {
 
   constructor(
     private preferencesService: PreferencesService,
-    private router: Router
+    private router: Router,
+    private toastController: ToastController
   ) { }
 
   async ngOnInit() {
     const userLogado = await this.preferencesService.getUsuarioLogado();
-    if (userLogado?.nivel === 'admin') {
+    if (userLogado.nivel === 'admin') {
       this.isColaborador = false;
       this.isAdmin = true;
       this.isProfissional = false;
 
       await this.carregarDisponibilidades(true);
-    } else if (userLogado?.nivel === 'funcionario') {
+    } else if (userLogado.nivel === 'funcionario') {
       this.isColaborador = false;
       this.isAdmin = false;
       this.isProfissional = true;
@@ -90,7 +92,7 @@ export class ListarDisponibilidadesPage implements OnInit {
     } catch (error) {
       if (reset) this.disponibilidades = [];
       this.fimDaLista = true;
-      alert('Erro ao conectar ao servidor.');
+      this.presentToast('Erro ao conectar ao servidor.', 'danger');
     }
     this.carregando = false;
     if (event) event.target.complete();
@@ -109,8 +111,8 @@ export class ListarDisponibilidadesPage implements OnInit {
     /*const dataObj = new Date(data);
     return dias[dataObj.getDay()];*/
     const [ano, mes, dia] = data.split('-').map(Number);
-  const dataObj = new Date(ano, mes - 1, dia); // mês começa do zero
-  return dias[dataObj.getDay()];
+    const dataObj = new Date(ano, mes - 1, dia); // mês começa do zero
+    return dias[dataObj.getDay()];
   }
 
   async verHorarios(disponivel: any) {
@@ -140,7 +142,7 @@ export class ListarDisponibilidadesPage implements OnInit {
       }
     } catch (error) {
       this.horariosSelecionados = [];
-      alert('Erro ao conectar ao servidor.');
+      this.presentToast('Erro ao conectar ao servidor.', 'danger');
     }
   }
 
@@ -152,32 +154,83 @@ export class ListarDisponibilidadesPage implements OnInit {
   }
 
   async removerHorario(hora: any) {
-    try {
-      const response = await fetch('https://api.ergonomiquesaude.com.br/api/agenda/agenda.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        mode: 'cors',
-        body: JSON.stringify({
-          action: 'remover_hora',
-          disponibilidade_id: hora.disponibilidade_id,
-          horario_id: hora.id,
-          hora: hora.hora,
-          profissional_id: hora.profissional_id,
-        })
-      });
-      const data = await response.json();
+    const confirmacao = confirm('Deseja remover esse horário?');
+    if (confirmacao) {
+      try {
+        const response = await fetch('https://api.ergonomiquesaude.com.br/api/agenda/agenda.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          mode: 'cors',
+          body: JSON.stringify({
+            action: 'remover_hora',
+            disponibilidade_id: hora.disponibilidade_id,
+            horario_id: hora.id,
+            hora: hora.hora,
+            profissional_id: hora.profissional_id,
+          })
+        });
+        const data = await response.json();
 
-      if (data.status === 200) {
-        alert('Horário removido com sucesso.');
-              this.verHorarios(hora);
-
-      } else {
-        alert(data.message);
-        this.horariosSelecionados = [];
+        if (data.status === 200) {
+          this.horariosSelecionados = this.horariosSelecionados.filter(
+            h => h.id !== hora.id
+          );
+          this.presentToast('Horário removido com sucesso.', 'success');
+        } else {
+          this.presentToast(data.message, 'danger');
+        }
+      } catch (error) {
+        this.presentToast('Erro ao conectar ao servidor.', 'danger');
       }
-    } catch (error) {
-      this.horariosSelecionados = [];
-      alert('Erro ao conectar ao servidor.');
     }
+  }
+
+  async removerDisponibilidade(disponivel: any) {
+    const confirmacao = confirm('Deseja remover a disponibilidade?');
+    if (confirmacao) {
+      try {
+        const response = await fetch('https://api.ergonomiquesaude.com.br/api/agenda/agenda.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          mode: 'cors',
+          body: JSON.stringify({
+            action: 'remover_disponibilidade',
+            disponibilidadeId: disponivel.disponibilidade_id,
+            empresa_id: disponivel.empresa_id,
+            data: disponivel.data_disponibilidade,
+            profissional_id: disponivel.profissional_id,
+          })
+        });
+        const data = await response.json();
+
+        if (data.status === 200) {
+
+          this.disponibilidades = this.disponibilidades.filter(
+            d => d.disponibilidade_id !== disponivel.disponibilidade_id
+          );
+          // Se estava mostrando os horários dessa disponibilidade, fecha o grid
+          if (this.disponibilidadeSelecionadaId === disponivel.disponibilidade_id) {
+            this.disponibilidadeSelecionadaId = null;
+            this.horariosSelecionados = [];
+            this.gridView = false;
+          } 
+          this.presentToast(data.message, 'success');
+        } else {
+          this.presentToast(data.message, 'danger');
+        }
+      } catch (error) {
+        this.presentToast('Erro ao conectar ao servidor.', 'danger');
+      }
+    }
+  }
+
+  async presentToast(message: string, color: string = 'primary') {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2500,
+      color,
+      position: 'top'
+    });
+    toast.present();
   }
 }

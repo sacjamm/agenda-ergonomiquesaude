@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PreferencesService } from 'src/app/services/preferences.service';
 import { Router } from '@angular/router';
-import { AlertController, IonSelect, IonInput } from '@ionic/angular';
+import { AlertController, IonSelect, IonInput,ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-add-disponibilidade',
@@ -51,17 +51,19 @@ export class AddDisponibilidadePage implements OnInit {
 
   constructor(
     private preferencesService: PreferencesService,
-    private router: Router, private alertController: AlertController
+    private router: Router, 
+    private alertController: AlertController,
+    private toastController: ToastController
   ) { }
 
   async ngOnInit() {
     const userLogado = await this.preferencesService.getUsuarioLogado();
-    if (userLogado?.nivel === 'admin') {
+    if (userLogado.nivel === 'admin') {
       this.isAdmin = true;
       this.isProfissional = false;
       await this.listaProfissionais();
       this.gerarDatasProximosMeses(2);
-    } else if (userLogado?.nivel === 'funcionario') {
+    } else if (userLogado.nivel === 'funcionario') {
       this.isAdmin = false;
       this.isProfissional = true;
     } else {
@@ -91,7 +93,7 @@ export class AddDisponibilidadePage implements OnInit {
         this.profissionais = [];
       }
     } catch (error) {
-      alert('Erro ao conectar ao servidor.');
+      this.presentToast('Erro ao conectar ao servidor.','danger');
       this.profissionais = [];
     }
   }
@@ -99,7 +101,6 @@ export class AddDisponibilidadePage implements OnInit {
   async onProfissionalChange(event?: any) {
     this.profissionalSelected = event.detail.value;
     this.profissional_id = this.profissionalSelected;
-    console.log(this.profissionalSelected);
   }
 
   async buscarEmpresas(event: any) {
@@ -108,7 +109,7 @@ export class AddDisponibilidadePage implements OnInit {
       const empresaInput = await this.inputempresaSearch.getInputElement();
       empresaInput.blur();
       await this.inputprofissionalSelected.open();
-      this.presentAlert('Selecione um profissional primeiro.');
+      this.presentToast('Selecione um profissional primeiro.','danger');
       this.empresaSearch = '';
       return;
     }
@@ -140,7 +141,6 @@ export class AddDisponibilidadePage implements OnInit {
     this.empresaSelecionada = empresa;
     this.empresaSearch = empresa.razao_social;
     this.empresasFiltradas = [];
-    console.log(this.profissional_id);
   }
 
   async aoLimparEmpresa(input: any) {
@@ -298,7 +298,7 @@ export class AddDisponibilidadePage implements OnInit {
     !this.horariosSelecionados ||
     this.horariosSelecionados.length === 0
   ) {
-    this.presentAlert('Preencha todos os campos obrigatórios e selecione pelo menos um horário.');
+    this.presentToast('Preencha todos os campos obrigatórios e selecione pelo menos um horário.','danger');
     return;
   }
 
@@ -335,15 +335,23 @@ export class AddDisponibilidadePage implements OnInit {
       this.mostrarManha = false;
       this.mostrarTarde = false;
       // Redireciona para a tela desejada (ajuste a rota conforme necessário)
-      this.presentAlert('Disponibilidade salva com sucesso!').then(() => {
+      this.presentToast('Disponibilidade salva com sucesso!','success').then(() => {
         this.router.navigate(['/listar-disponibilidades']);
       });
     } else {
-      this.presentAlert(data.message || 'Erro ao salvar disponibilidade.');
+      this.presentToast(data.message || 'Erro ao salvar disponibilidade.','danger');
     }
   } catch (error) {
-    this.presentAlert('Erro ao conectar ao servidor.');
+    this.presentToast('Erro ao conectar ao servidor.','danger');
   }
 }
-
+async presentToast(message: string, color: string = 'primary') {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2500,
+      color,
+      position: 'top'
+    });
+    toast.present();
+  }
 }

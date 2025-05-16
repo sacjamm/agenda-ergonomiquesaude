@@ -5,7 +5,7 @@ import { Preferences } from '@capacitor/preferences';
   providedIn: 'root'
 })
 export class PreferencesService {
-  constructor() {}
+  constructor() { }
 
   async set(key: string, value: any): Promise<void> {
     await Preferences.set({
@@ -32,16 +32,13 @@ export class PreferencesService {
     await Preferences.clear();
   }
 
-  async logout(): Promise<void> {
-    await this.remove('token');
-    await this.remove('usuario');
-    await this.remove('login_data');
-    // Adicione outros dados que desejar limpar no logout
+  async logout() {
+    await this.clear();
   }
 
   async getUsuarioLogado(): Promise<any | null> {
     const data = await this.getLoginData();
-  return data?.usuario;
+    return data.usuario;
   }
 
   async getLoginData(): Promise<any | null> {

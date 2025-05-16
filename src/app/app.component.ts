@@ -14,6 +14,9 @@ export class AppComponent implements OnInit {
         { title: 'Home', url: '/folder/inbox', icon: 'home' },
       ];
 
+      emailConfig: string = '';
+      nomeConfig: string = '';
+
   constructor(
     private preferencesService: PreferencesService,
     private router: Router
@@ -21,7 +24,8 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     const userLogado = await this.preferencesService.getUsuarioLogado();
-    console.log(userLogado)
+    this.emailConfig=userLogado.email;
+    this.nomeConfig=userLogado.name;
     if (userLogado.nivel === 'assinante' && userLogado.agenda_funcao_usuario === 'colaborador') {
       this.appPages = [
         { title: 'Home', url: '/folder/inbox', icon: 'home' },
@@ -40,6 +44,7 @@ export class AppComponent implements OnInit {
 
   async logout() {
     await this.preferencesService.logout(); // Limpa todos os dados salvos
-    this.router.navigate(['/login']); // Redireciona para login
+    window.location.href = '/login';
+    //this.router.navigate(['/login']); // Redireciona para login
   }
 }

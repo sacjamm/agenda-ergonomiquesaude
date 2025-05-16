@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PreferencesService } from 'src/app/services/preferences.service';
 import { Router } from '@angular/router';
-import { LoadingController, AlertController } from '@ionic/angular';
+import { LoadingController, AlertController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-add-agendamento-colaborador',
@@ -31,12 +31,13 @@ export class AddAgendamentoColaboradorPage implements OnInit {
   constructor(
     private preferencesService: PreferencesService,
     private router: Router,
-    private loadingCtrl: LoadingController, private alertController: AlertController
+    private loadingCtrl: LoadingController, private alertController: AlertController,
+    private toastController: ToastController
   ) { }
 
   async ngOnInit() {
     const userLogado = await this.preferencesService.getUsuarioLogado();
-    if (userLogado?.nivel === 'assinante' && userLogado?.agenda_funcao_usuario === 'colaborador') {
+    if (userLogado.nivel === 'assinante' && userLogado.agenda_funcao_usuario === 'colaborador') {
       this.usuario_id = userLogado.id;
       this.empresa_id = userLogado.empresa_id;
       await this.listarProfissionais();
@@ -70,7 +71,7 @@ export class AddAgendamentoColaboradorPage implements OnInit {
       }
     } catch (error) {
       this.profissionais = [];
-      alert('Erro ao conectar ao servidor.');
+      this.presentToast('Erro ao conectar ao servidor.','danger');
     } finally {
       await loading.dismiss();
     }
@@ -139,7 +140,6 @@ export class AddAgendamentoColaboradorPage implements OnInit {
       this.horariosDisponiveis = data.horas;
     }
   }
-
   // Gera todas as datas entre min e max para desabilitar as não disponíveis
   getAllDatesBetween(start: string, end: string): string[] {
     const dates = [];
@@ -151,12 +151,6 @@ export class AddAgendamentoColaboradorPage implements OnInit {
     }
     return dates;
   }
-
-  /*public isDateEnabled = (dateIsoString: string): boolean => {
-    // datasDisponiveis deve conter as datas no formato 'YYYY-MM-DD'
-    const date = dateIsoString.split('T')[0];
-    return this.datasDisponiveis.some(d => d.data === date);
-  };*/
 
   public isDateEnabled = (dateIsoString: string): boolean => {
     const date = dateIsoString.split('T')[0];
@@ -172,12 +166,6 @@ export class AddAgendamentoColaboradorPage implements OnInit {
 
   async salvarAgenda() {
 
-    console.log(this.disponibilidade_id)
-    console.log(this.empresa_id)
-    console.log(this.profissionalSelecionado)
-    console.log(this.dataSelecionada);
-    console.log(this.horarioSelecionado);
-
     if (
     !this.empresa_id ||
     !this.profissionalSelecionado ||
@@ -185,7 +173,7 @@ export class AddAgendamentoColaboradorPage implements OnInit {
     !this.horarioSelecionado ||
     !this.disponibilidade_id
   ) {
-    this.presentAlert('Preencha todos os campos obrigatórios e selecione pelo menos um horário.');
+    this.presentToast('Preencha todos os campos obrigatórios e selecione pelo menos um horário.','warning');
     return;
   }
 
@@ -215,16 +203,15 @@ export class AddAgendamentoColaboradorPage implements OnInit {
       this.profissionalSelecionado = 0;
       this.horarioSelecionado = '';
       this.disponibilidade_id=0;
-      
       // Redireciona para a tela desejada (ajuste a rota conforme necessário)
-      this.presentAlert('Agendamento realizado com sucesso!').then(() => {
+      this.presentToast('Agendamento realizado com sucesso!','success').then(() => {
         this.router.navigate(['/listar-agendamentos-colaborador']);
       });
     } else {
-      this.presentAlert(data.message || 'Erro ao salvar agendamento.');
+      this.presentToast(data.message || 'Erro ao salvar agendamento.','danger');
     }
   } catch (error) {
-    this.presentAlert('Erro ao conectar ao servidor.');
+    this.presentToast('Erro ao conectar ao servidor.','danger');
   }
   }
 
@@ -235,5 +222,15 @@ export class AddAgendamentoColaboradorPage implements OnInit {
       buttons: ['OK']
     });
     await alert.present();
+  }
+
+  async presentToast(message: string, color: string = 'primary') {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2500,
+      color,
+      position: 'top'
+    });
+    return toast.present();
   }
 }

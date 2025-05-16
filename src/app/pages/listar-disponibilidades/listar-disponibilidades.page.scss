@@ -1,20 +1,32 @@
 ion-card-header {
     --background: #54acb4 !important;
+    -webkit-padding-start: 7px !important;
+    padding-inline-start: 7px !important;
+    -webkit-padding-end: 7px !important;
+    padding-inline-end: 7px !important;
+    padding-top: 7px !important;
+    padding-bottom: 7px !important;
 
     ion-card-title {
+        font-size: 1rem !important;
+        font-weight: 600 !important;
         --color: #fff !important;
     }
 
     ion-card-subtitle {
+        font-size: 0.750rem !important;
         --color: #fff !important;
     }
 }
 
-ion-list.list-md {
+.list-md {
     -webkit-margin-start: 0px !important;
     margin-inline-start: 0px !important;
     -webkit-margin-end: 0px !important;
     margin-inline-end: 0px !important;
+
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
 }
 
 .list-md.list-inset {
@@ -30,4 +42,24 @@ ion-list.list-md {
 ion-item {
     --padding-start: 2px !important;
     --inner-padding-end: 2px !important;
+}
+
+.ion-padding-disp {
+    border-top: 1px solid #f1f1f1 !important;
+    --padding-start: 3px !important;
+    --padding-end: 3px !important;
+    --padding-top: 3px !important;
+    --padding-bottom: 3px !important;
+    padding-inline-start: 3px !important;
+    padding-inline-end: 3px !important;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+}
+.manha, .tarde{
+    font-size: 16px !important;
+    text-align: center !important;
+}
+.unread-indicator-wrapper {
+    -webkit-margin-end: 5px !important;
+    margin-inline-end: 5px !important;
 }

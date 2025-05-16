@@ -61,10 +61,21 @@ ion-header {
 ion-button.button-solid {
     --background: #54acb4 !important;
 }
-
+ion-card{
+    ion-toolbar{
+        --min-height: 36px;
+    }
+}
 ion-toolbar {
+    ion-title{
+        font-size: 12px !important;
+    }
     ion-buttons {
         ion-button {
+            font-size: 10px !important;
+        }
+        ion-button.btn-hora {
+            font-size: 10px !important;
             --background: #54acb4 !important;
             --color: #fff !important;
         }

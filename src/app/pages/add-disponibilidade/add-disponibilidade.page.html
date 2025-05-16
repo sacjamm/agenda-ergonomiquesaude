@@ -37,8 +37,10 @@
       (ionClear)="aoLimparEmpresa(inputempresaSearch)" clearInput></ion-input>
   </ion-item>
 
-  <div *ngIf="empresasFiltradas.length > 0 && !empresaSelecionada" class="ion-no-padding no-border" style="margin-bottom: 10px !important;background: #a6eef4 !important;padding-left: 3px !important;border-bottom-left-radius: 5px !important;border-bottom-right-radius: 5px !important;">
-    <ion-item *ngFor="let empresa of empresasFiltradas" (click)="selecionarEmpresa(empresa)" lines="full" class="ion-no-padding no-border" style="--min-height: 38px;">
+  <div *ngIf="empresasFiltradas.length > 0 && !empresaSelecionada" class="ion-no-padding no-border"
+    style="margin-bottom: 10px !important;background: #a6eef4 !important;padding-left: 3px !important;border-bottom-left-radius: 5px !important;border-bottom-right-radius: 5px !important;">
+    <ion-item *ngFor="let empresa of empresasFiltradas" (click)="selecionarEmpresa(empresa)" lines="full"
+      class="ion-no-padding no-border" style="--min-height: 38px;">
       {{ empresa.razao_social }} - {{ empresa.cnpj }}
     </ion-item>
   </div>
@@ -49,17 +51,13 @@
     <ion-row>
       <ion-col size="6" class="col-left">
         <ion-label>Horário inicial da manhã</ion-label>
-        <ion-input type="time" fill="outline" 
-        [(ngModel)]="horaManhaInicio" 
-        name="horaManhaInicio" 
-        (ionChange)="atualizarHorariosDisponiveis()"></ion-input>
+        <ion-input type="time" fill="outline" [(ngModel)]="horaManhaInicio" name="horaManhaInicio"
+          (ionChange)="atualizarHorariosDisponiveis()"></ion-input>
       </ion-col>
       <ion-col size="6" class="col-right">
         <ion-label>Horário final da manhã</ion-label>
-        <ion-input type="time" fill="outline" 
-        [(ngModel)]="horaManhaFim" 
-        name="horaManhaFim" 
-        (ionChange)="atualizarHorariosDisponiveis()"></ion-input>
+        <ion-input type="time" fill="outline" [(ngModel)]="horaManhaFim" name="horaManhaFim"
+          (ionChange)="atualizarHorariosDisponiveis()"></ion-input>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -67,95 +65,72 @@
     <ion-row>
       <ion-col size="6" class="col-left">
         <ion-label>Horário inicial da tarde</ion-label>
-        <ion-input type="time" fill="outline" 
-        [(ngModel)]="horaTardeInicio" 
-        name="horaTardeInicio" 
-        (ionChange)="atualizarHorariosDisponiveis()"></ion-input>
+        <ion-input type="time" fill="outline" [(ngModel)]="horaTardeInicio" name="horaTardeInicio"
+          (ionChange)="atualizarHorariosDisponiveis()"></ion-input>
       </ion-col>
       <ion-col size="6" class="col-right">
         <ion-label>Horário final da tarde</ion-label>
-        <ion-input type="time" fill="outline" 
-        [(ngModel)]="horaTardeFim" 
-        name="horaTardeFim" 
-        (ionChange)="atualizarHorariosDisponiveis()"></ion-input>
+        <ion-input type="time" fill="outline" [(ngModel)]="horaTardeFim" name="horaTardeFim"
+          (ionChange)="atualizarHorariosDisponiveis()"></ion-input>
       </ion-col>
     </ion-row>
   </ion-grid>
 
-  <ion-item lines="none" class="ion-no-padding no-border">
-    <ion-select fill="outline" [(ngModel)]="intervalo" 
-    label-placement="floating" 
-    placeholder="Intervalo de Horário"
-      label="Selecione o intervalo de horário de atendimento *"
-       (ionChange)="atualizarHorariosDisponiveis()">
-      <ion-select-option value="5">5 minutos</ion-select-option>
-      <ion-select-option value="10">10 minutos</ion-select-option>
-      <ion-select-option value="15">15 minutos</ion-select-option>
-      <ion-select-option value="20">20 minutos</ion-select-option>
-      <ion-select-option value="25">25 minutos</ion-select-option>
-      <ion-select-option value="30">30 minutos</ion-select-option>
-      <ion-select-option value="35">35 minutos</ion-select-option>
-      <ion-select-option value="40">40 minutos</ion-select-option>
-      <ion-select-option value="45">45 minutos</ion-select-option>
-      <ion-select-option value="50">50 minutos</ion-select-option>
-      <ion-select-option value="55">55 minutos</ion-select-option>
-      <ion-select-option value="60">60 minutos</ion-select-option>
-    </ion-select>
-  </ion-item>
-
-  <ion-item lines="none" class="ion-no-padding no-border">
-    <ion-select fill="outline" [(ngModel)]="datas" label-placement="floating" placeholder="Dias disponíveis na agenda"
-      label="Selecione a data *" multiple="true" 
-        (ionChange)="atualizarHorariosDisponiveis()">
-      <!--<ion-select-option class="select-mes"> Marcar todos de maio de 2025 </ion-select-option>
-      <ion-select-option> --&nbsp;&nbsp; Sexta-feira, 16/05/2025 </ion-select-option>-->
-      <ng-container *ngFor="let mes of mesesDisponiveis">
+  <br>
+  <ion-select fill="outline" [(ngModel)]="intervalo" label-placement="floating" placeholder="Intervalo de Horário"
+    label="Selecione o intervalo de horário de atendimento *" (ionChange)="atualizarHorariosDisponiveis()">
+    <ion-select-option value="5">5 minutos</ion-select-option>
+    <ion-select-option value="10">10 minutos</ion-select-option>
+    <ion-select-option value="15">15 minutos</ion-select-option>
+    <ion-select-option value="20">20 minutos</ion-select-option>
+    <ion-select-option value="25">25 minutos</ion-select-option>
+    <ion-select-option value="30">30 minutos</ion-select-option>
+    <ion-select-option value="35">35 minutos</ion-select-option>
+    <ion-select-option value="40">40 minutos</ion-select-option>
+    <ion-select-option value="45">45 minutos</ion-select-option>
+    <ion-select-option value="50">50 minutos</ion-select-option>
+    <ion-select-option value="55">55 minutos</ion-select-option>
+    <ion-select-option value="60">60 minutos</ion-select-option>
+  </ion-select>
+  <br>
+  <ion-select fill="outline" [(ngModel)]="datas" label-placement="floating" placeholder="Dias disponíveis na agenda"
+    label="Selecione a data *" multiple="true" (ionChange)="atualizarHorariosDisponiveis()">
+    <ng-container *ngFor="let mes of mesesDisponiveis">
       <!-- Checkbox para marcar todo o mês -->
-      <ion-select-option
-        [value]="null"
-        (click)="toggleMes(mes); $event.stopPropagation();" 
-        class="select-mes">
-          <ion-checkbox slot="start" [checked]="isMesSelecionado(mes)" style="margin-right:8px"></ion-checkbox>
-         📅  {{ mes.label | titlecase }}
+      <ion-select-option [value]="null" (click)="toggleMes(mes); $event.stopPropagation();" class="select-mes">
+        <ion-checkbox slot="start" [checked]="isMesSelecionado(mes)" style="margin-right:8px"></ion-checkbox>
+        📅 {{ mes.label | titlecase }}
       </ion-select-option>
-      
+
       <!-- Datas do mês -->
       <ion-select-option *ngFor="let dia of getDatasDoMes(mes.mes)" [value]="dia.data">
         {{ dia.label | titlecase }}
       </ion-select-option>
     </ng-container>
-    </ion-select>
-  </ion-item>
+  </ion-select>
+
 
   <div class="div-input-horarios">
     <ion-grid class="ion-no-padding no-border">
       <ion-row>
         <ion-col size="6" class="col-left">
-          <ion-checkbox label-placement="stacked" 
-          alignment="center" 
-          [(ngModel)]="mostrarManha" 
-        (ionChange)="atualizarHorariosDisponiveis()">Habilitar horários
+          <ion-checkbox labelPlacement="stacked" alignment="center" [(ngModel)]="mostrarManha"
+            (ionChange)="atualizarHorariosDisponiveis()">Habilitar horários
             (manhã)</ion-checkbox>
         </ion-col>
         <ion-col size="6" class="col-right">
-          <ion-checkbox label-placement="stacked" 
-          alignment="center" 
-          [(ngModel)]="mostrarTarde" 
-        (ionChange)="atualizarHorariosDisponiveis()">Habilitar horários
+          <ion-checkbox labelPlacement="stacked" alignment="center" [(ngModel)]="mostrarTarde"
+            (ionChange)="atualizarHorariosDisponiveis()">Habilitar horários
             (tarde)</ion-checkbox>
         </ion-col>
       </ion-row>
     </ion-grid>
   </div>
 
-  <ion-item lines="none" class="ion-no-padding no-border">
-    <ion-select fill="outline" 
-    [(ngModel)]="horarios" multiple="true" 
-    label="Selecione *"
-      placeholder="Horários Disponíveis" 
-      label-placement="floating">
+  <ion-select fill="outline" [(ngModel)]="horariosSelecionados" multiple="true" label="Selecione *"
+    placeholder="Horários Disponíveis" label-placement="floating">
 
-      <ng-container *ngFor="let grupo of getHorariosAgrupados()">
+    <ng-container *ngFor="let grupo of getHorariosAgrupados()">
       <ion-select-option disabled class="titulo-data">
         📅 {{ grupo.data | date:'fullDate' }}
       </ion-select-option>
@@ -168,13 +143,12 @@
         {{ horario.hora }}
       </ion-select-option>
     </ng-container>
+  </ion-select>
 
-      <!--<ion-select-option class="titulo-data"> 📅 Saturday, May 17, 2025 </ion-select-option>
-      <ion-select-option *ngFor="let horario of horarios" [value]="horario">
-    {{ horario.data_horarios }} - {{ horario.hora }}
-  </ion-select-option>-->
-
-    </ion-select>
-  </ion-item>
+  <ion-button expand="block" size="large" (click)="salvarDisponibilidade()" style="margin-top: 20px;"
+    [disabled]="!horariosSelecionados.length">
+    <ion-icon slot="start" name="save"></ion-icon>
+    Salvar Disponibilidade
+  </ion-button>
 
 </ion-content>

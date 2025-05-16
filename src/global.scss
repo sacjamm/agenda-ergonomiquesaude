@@ -68,3 +68,13 @@ ion-alert .alert-checkbox-button.select-mes .alert-checkbox-label {
     font-weight: bold !important;
     font-style: italic !important;
 }
+
+:host(.checkbox-label-placement-stacked) .label-text-wrapper{
+    margin-bottom: 10px !important;
+}
+ion-checkbox[labelPlacement="stacked"] .label-text-wrapper {
+  margin-bottom: 10px !important;
+}
+::ng-deep ion-checkbox[labelPlacement="stacked"] .label-text-wrapper {
+  margin-bottom: 10px !important;
+}

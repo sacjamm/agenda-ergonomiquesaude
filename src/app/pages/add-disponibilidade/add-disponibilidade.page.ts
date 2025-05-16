@@ -47,7 +47,7 @@ export class AddDisponibilidadePage implements OnInit {
   public mesesSelecionados: string[] = [];
 
   public horariosDisponiveis: any[] = []; // todos os horários gerados
-public horariosSelecionados: any[] = []; // apenas os horários escolhidos
+  public horariosSelecionados: any[] = []; // apenas os horários escolhidos
 
   constructor(
     private preferencesService: PreferencesService,
@@ -181,7 +181,7 @@ public horariosSelecionados: any[] = []; // apenas os horários escolhidos
 
   atualizarHorariosDisponiveis() {
     if (!this.datas || this.datas.length === 0) {
-      this.horarios = [];
+      this.horariosDisponiveis = [];
       return;
     }
 
@@ -190,8 +190,6 @@ public horariosSelecionados: any[] = []; // apenas os horários escolhidos
     for (const data of this.datas) {
       let horariosData: string[] = [];
 
-      console.log(this.mostrarManha);
-      console.log(this.mostrarTarde);
       if (this.mostrarManha) {
         horariosData = horariosData.concat(
           this.gerarHorariosEntre(this.horaManhaInicio, this.horaManhaFim, this.intervalo)
@@ -215,7 +213,9 @@ public horariosSelecionados: any[] = []; // apenas os horários escolhidos
       );
     }
 
-    this.horarios = horariosGerados;
+    this.horariosDisponiveis = horariosGerados;
+    // Se quiser selecionar todos automaticamente:
+    this.horariosSelecionados = [...this.horariosDisponiveis];
   }
 
   gerarDatasProximosMeses(qtdMeses: number = 3) {
@@ -287,4 +287,63 @@ public horariosSelecionados: any[] = []; // apenas os horários escolhidos
     }
     return agrupados;
   }
+
+  async salvarDisponibilidade() {
+  // Validação básica
+  if (
+    !this.empresa_id ||
+    !this.profissional_id ||
+    !this.datas ||
+    this.datas.length === 0 ||
+    !this.horariosSelecionados ||
+    this.horariosSelecionados.length === 0
+  ) {
+    this.presentAlert('Preencha todos os campos obrigatórios e selecione pelo menos um horário.');
+    return;
+  }
+
+  // Monta os dados conforme a endpoint espera
+  const payload = {
+    action: 'salvar_disponibilidade',
+    empresa_id: this.empresa_id,
+    profissional_id: this.profissional_id,
+    intervalo: this.intervalo,
+    datas: this.datas,
+    horarios_json: JSON.stringify(this.horariosSelecionados),
+    horarios_detalhados: this.horariosSelecionados
+  };
+
+  try {
+    const response = await fetch('https://api.ergonomiquesaude.com.br/api/agenda/disponibilidade.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      mode: 'cors',
+      body: JSON.stringify(payload)
+    });
+    const data = await response.json();
+
+    if (data.status === 200) {
+      // Limpa o formulário
+      this.empresa_id = 0;
+      this.profissional_id = 0;
+      this.profissionalSelected = 0;
+      this.empresaSearch = '';
+      this.empresaSelecionada = null;
+      this.datas = [];
+      this.horariosDisponiveis = [];
+      this.horariosSelecionados = [];
+      this.mostrarManha = false;
+      this.mostrarTarde = false;
+      // Redireciona para a tela desejada (ajuste a rota conforme necessário)
+      this.presentAlert('Disponibilidade salva com sucesso!').then(() => {
+        this.router.navigate(['/listar-disponibilidades']);
+      });
+    } else {
+      this.presentAlert(data.message || 'Erro ao salvar disponibilidade.');
+    }
+  } catch (error) {
+    this.presentAlert('Erro ao conectar ao servidor.');
+  }
+}
+
 }

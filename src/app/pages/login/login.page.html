@@ -1,10 +1,10 @@
 <ion-content [fullscreen]="true" class="ion-no-padding">
 
- <div style="display: flex; flex-direction: column; align-items: center; margin-top: 5%;">
+  <div style="display: flex; flex-direction: column; align-items: center; margin-top: 5%;">
     <img src="assets/img/logo.png" alt="Logomarca" style="width: 150px; max-width: 60vw;">
   </div>
 
- <div style="
+  <div style="
     display: flex;
     justify-content: center;
     align-items: center;
@@ -16,20 +16,14 @@
       <ion-card-content>
         <form (submit)="login($event)">
           <ion-input type="email" label="E-mail" label-placement="floating" fill="outline" placeholder="Digite o e-mail"
-            required 
-    [(ngModel)]="email"
-    name="email"></ion-input>
-
-<br>
-
+            required [(ngModel)]="email" name="email"></ion-input>
+          <br>
           <ion-input type="password" label="Senha" label-placement="floating" fill="outline"
-            placeholder="Digite a senha" required 
-    [(ngModel)]="senha"
-    name="senha">
+            placeholder="Digite a senha" required [(ngModel)]="senha" name="senha">
             <ion-input-password-toggle slot="end"></ion-input-password-toggle>
           </ion-input>
 
-          <ion-button expand="block" type="submit" style="margin-top: 16px;">
+          <ion-button expand="block" type="submit">
             <ion-icon slot="start" name="log-in-outline" size="large"></ion-icon>
             Entrar
           </ion-button>

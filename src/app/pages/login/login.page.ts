@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PreferencesService } from 'src/app/services/preferences.service';
 import { Router } from '@angular/router';
+import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -16,8 +17,17 @@ export class LoginPage implements OnInit {
 
   constructor(
     private preferencesService: PreferencesService,
-    private router: Router
+    private router: Router,
+    private menuCtrl: MenuController
   ) { }
+
+  ionViewWillEnter() {
+    this.menuCtrl.enable(false); // desabilita o menu ao entrar na tela de login
+  }
+
+  ionViewDidLeave() {
+    this.menuCtrl.enable(true); // habilita o menu ao sair da tela de login
+  }
 
   ngOnInit() {
   }
@@ -45,10 +55,9 @@ export class LoginPage implements OnInit {
       if (data.status === 200 && data.token && data.usuario) {
         // Salva todos os dados retornados do endpoint
         await this.preferencesService.set('login_data', data);
-        const loginData = await this.preferencesService.getLoginData();
-        console.log(loginData);
-        console.log(this.preferencesService.getUsuarioLogado());
-        alert('Login realizado com sucesso!');
+        const userLogado = await this.preferencesService.getUsuarioLogado();
+        console.log(userLogado);
+         alert('Login realizado com sucesso!');
         this.router.navigate(['/folder/inbox']);
         
       } else {

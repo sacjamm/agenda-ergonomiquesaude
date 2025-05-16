@@ -32,14 +32,22 @@ export class AddDisponibilidadePage implements OnInit {
 
   intervalo: number = 20;
 
-  datas: any[] = [];
+  datasInput: any[] = [];
   horarios: any[] = [];
 
-  mostrarManha: boolean = true;
-  mostrarTarde: boolean = true;
+  mostrarManha: boolean = false;
+  mostrarTarde: boolean = false;
 
   public empresasFiltradas: any[] = [];
   public empresaSelecionada: any = null;
+
+  public datasDisponiveis: { data: string, label: string, mes: string }[] = [];
+  public mesesDisponiveis: { mes: string, label: string, datas: string[] }[] = [];
+  public datas: string[] = [];
+  public mesesSelecionados: string[] = [];
+
+  public horariosDisponiveis: any[] = []; // todos os horários gerados
+public horariosSelecionados: any[] = []; // apenas os horários escolhidos
 
   constructor(
     private preferencesService: PreferencesService,
@@ -52,6 +60,7 @@ export class AddDisponibilidadePage implements OnInit {
       this.isAdmin = true;
       this.isProfissional = false;
       await this.listaProfissionais();
+      this.gerarDatasProximosMeses(2);
     } else if (userLogado?.nivel === 'funcionario') {
       this.isAdmin = false;
       this.isProfissional = true;
@@ -140,7 +149,7 @@ export class AddDisponibilidadePage implements OnInit {
     this.empresaSelecionada = null;
     this.empresa_id = 0;
     const nativeInput = await input.getInputElement();
-    nativeInput.blur(); 
+    nativeInput.blur();
     console.log('Campo limpo e desfocado.');
   }
 
@@ -161,7 +170,7 @@ export class AddDisponibilidadePage implements OnInit {
     while (h < hFim || (h === hFim && m <= mFim)) {
       const horaStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
       horarios.push(horaStr);
-      m += intervalo;
+      m += Number(intervalo); // Garante que é número
       if (m >= 60) {
         h += Math.floor(m / 60);
         m = m % 60;
@@ -181,6 +190,8 @@ export class AddDisponibilidadePage implements OnInit {
     for (const data of this.datas) {
       let horariosData: string[] = [];
 
+      console.log(this.mostrarManha);
+      console.log(this.mostrarTarde);
       if (this.mostrarManha) {
         horariosData = horariosData.concat(
           this.gerarHorariosEntre(this.horaManhaInicio, this.horaManhaFim, this.intervalo)
@@ -207,5 +218,73 @@ export class AddDisponibilidadePage implements OnInit {
     this.horarios = horariosGerados;
   }
 
+  gerarDatasProximosMeses(qtdMeses: number = 3) {
+    const hoje = new Date();
+    this.datasDisponiveis = [];
+    this.mesesDisponiveis = [];
 
+    for (let m = 0; m < qtdMeses; m++) {
+      const dataBase = new Date(hoje.getFullYear(), hoje.getMonth() + m, 1);
+      const mes = dataBase.toLocaleString('default', { month: 'long', year: 'numeric' });
+      const datasMes: string[] = [];
+
+      let dia = 1;
+      while (true) {
+        const dataAtual = new Date(dataBase.getFullYear(), dataBase.getMonth(), dia);
+        if (dataAtual.getMonth() !== dataBase.getMonth()) break;
+        /*if (m === 0 && dataAtual < hoje) { dia++; continue; } // só datas futuras no mês atual*/
+        if (m === 0) {
+          // Ignora datas antes de hoje (considerando só ano, mês, dia)
+          const dataAtualSemHora = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), dataAtual.getDate());
+          const hojeSemHora = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+          if (dataAtualSemHora < hojeSemHora) { dia++; continue; }
+        }
+
+        const dataStr = dataAtual.toISOString().slice(0, 10);
+        const label = dataAtual.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
+        this.datasDisponiveis.push({ data: dataStr, label, mes });
+        datasMes.push(dataStr);
+        dia++;
+      }
+      this.mesesDisponiveis.push({ mes, label: mes.charAt(0).toUpperCase() + mes.slice(1), datas: datasMes });
+    }
+  }
+
+  toggleMes(mes: { mes: string, datas: string[] }) {
+    const todasSelecionadas = mes.datas.every(d => this.datas.includes(d));
+    if (todasSelecionadas) {
+      // Desmarca todas do mês
+      this.datas = this.datas.filter(d => !mes.datas.includes(d));
+    } else {
+      // Marca todas do mês (sem duplicar)
+      this.datas = Array.from(new Set([...this.datas, ...mes.datas]));
+    }
+    this.atualizarHorariosDisponiveis();
+  }
+
+  isMesSelecionado(mes: { mes: string, datas: string[] }) {
+    return mes.datas.every(d => this.datas.includes(d));
+  }
+
+  getDatasDoMes(mes: string) {
+    return this.datasDisponiveis.filter(d => d.mes === mes);
+  }
+
+  getHorariosAgrupados() {
+    // Retorna um array: [{ data, horariosManha: [], horariosTarde: [] }]
+    const agrupados: any[] = [];
+    const datasSelecionadas = this.datas || [];
+
+    for (const data of datasSelecionadas) {
+      const horariosData = this.horariosDisponiveis.filter(h => h.data_horarios === data);
+      const horariosManha = horariosData.filter(h => h.hora < '12:00');
+      const horariosTarde = horariosData.filter(h => h.hora >= '12:00');
+      agrupados.push({
+        data,
+        horariosManha,
+        horariosTarde
+      });
+    }
+    return agrupados;
+  }
 }

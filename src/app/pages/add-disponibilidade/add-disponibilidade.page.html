@@ -83,8 +83,11 @@
   </ion-grid>
 
   <ion-item lines="none" class="ion-no-padding no-border">
-    <ion-select fill="outline" [(ngModel)]="intervalo" label-placement="floating" placeholder="Intervalo de Horário"
-      label="Selecione o intervalo de horário de atendimento *">
+    <ion-select fill="outline" [(ngModel)]="intervalo" 
+    label-placement="floating" 
+    placeholder="Intervalo de Horário"
+      label="Selecione o intervalo de horário de atendimento *"
+       (ionChange)="atualizarHorariosDisponiveis()">
       <ion-select-option value="5">5 minutos</ion-select-option>
       <ion-select-option value="10">10 minutos</ion-select-option>
       <ion-select-option value="15">15 minutos</ion-select-option>
@@ -104,8 +107,23 @@
     <ion-select fill="outline" [(ngModel)]="datas" label-placement="floating" placeholder="Dias disponíveis na agenda"
       label="Selecione a data *" multiple="true" 
         (ionChange)="atualizarHorariosDisponiveis()">
-      <ion-select-option class="select-mes"> Marcar todos de maio de 2025 </ion-select-option>
-      <ion-select-option> --&nbsp;&nbsp; Sexta-feira, 16/05/2025 </ion-select-option>
+      <!--<ion-select-option class="select-mes"> Marcar todos de maio de 2025 </ion-select-option>
+      <ion-select-option> --&nbsp;&nbsp; Sexta-feira, 16/05/2025 </ion-select-option>-->
+      <ng-container *ngFor="let mes of mesesDisponiveis">
+      <!-- Checkbox para marcar todo o mês -->
+      <ion-select-option
+        [value]="null"
+        (click)="toggleMes(mes); $event.stopPropagation();" 
+        class="select-mes">
+          <ion-checkbox slot="start" [checked]="isMesSelecionado(mes)" style="margin-right:8px"></ion-checkbox>
+         📅  {{ mes.label | titlecase }}
+      </ion-select-option>
+      
+      <!-- Datas do mês -->
+      <ion-select-option *ngFor="let dia of getDatasDoMes(mes.mes)" [value]="dia.data">
+        {{ dia.label | titlecase }}
+      </ion-select-option>
+    </ng-container>
     </ion-select>
   </ion-item>
 
@@ -136,10 +154,26 @@
     label="Selecione *"
       placeholder="Horários Disponíveis" 
       label-placement="floating">
-      <ion-select-option class="titulo-data"> 📅 Saturday, May 17, 2025 </ion-select-option>
+
+      <ng-container *ngFor="let grupo of getHorariosAgrupados()">
+      <ion-select-option disabled class="titulo-data">
+        📅 {{ grupo.data | date:'fullDate' }}
+      </ion-select-option>
+      <ion-select-option disabled class="titulo-turno" *ngIf="grupo.horariosManha.length">🌅 Manhã</ion-select-option>
+      <ion-select-option *ngFor="let horario of grupo.horariosManha" [value]="horario">
+        {{ horario.hora }}
+      </ion-select-option>
+      <ion-select-option disabled class="titulo-turno" *ngIf="grupo.horariosTarde.length">🌇 Tarde</ion-select-option>
+      <ion-select-option *ngFor="let horario of grupo.horariosTarde" [value]="horario">
+        {{ horario.hora }}
+      </ion-select-option>
+    </ng-container>
+
+      <!--<ion-select-option class="titulo-data"> 📅 Saturday, May 17, 2025 </ion-select-option>
       <ion-select-option *ngFor="let horario of horarios" [value]="horario">
     {{ horario.data_horarios }} - {{ horario.hora }}
-  </ion-select-option>
+  </ion-select-option>-->
+
     </ion-select>
   </ion-item>
 

@@ -61,3 +61,10 @@ ion-header {
 ion-button.button-solid {
     --background: #54acb4 !important;
 }
+
+ion-alert .alert-checkbox-button.select-mes .alert-checkbox-label {
+    color: #2196f3 !important;
+    font-size: 18px !important;
+    font-weight: bold !important;
+    font-style: italic !important;
+}

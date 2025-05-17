@@ -1,7 +1,7 @@
 <ion-content [fullscreen]="true" class="ion-no-padding">
 
   <div style="display: flex; flex-direction: column; align-items: center; 
-  margin-top: 10%;">
+  margin-top: 15%;">
     <img src="assets/img/logo.png" alt="Logomarca" style="width: 150px; 
     max-width: 60vw;">
   </div>
@@ -10,16 +10,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 60vh;
     margin-top: 7vh;
-  ">
-    <ion-card style="min-width: 320px; max-width: 90vw; padding: 20px;">
+  "> 
+    <ion-card style="padding: 20px;">
       <ion-card-content>
         <form (submit)="login($event)">
-          <ion-input type="email" label="E-mail" label-placement="floating" fill="outline" placeholder="Digite o e-mail"
+          <ion-input type="email" size="large" label="E-mail" label-placement="floating" fill="outline" placeholder="Digite o e-mail"
             required [(ngModel)]="email" name="email"></ion-input>
           <br>
-          <ion-input type="password" label="Senha" label-placement="floating" fill="outline"
+          <ion-input type="password" size="large" label="Senha" label-placement="floating" fill="outline"
             placeholder="Digite a senha" required [(ngModel)]="senha" name="senha">
             <ion-input-password-toggle slot="end"></ion-input-password-toggle>
           </ion-input>

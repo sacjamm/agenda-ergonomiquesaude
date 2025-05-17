@@ -195,7 +195,7 @@ export class ListarAgendamentosPage implements OnInit {
           data: {
             action: 'google',
           },
-        },
+        }, 
         {
           icon: 'trash',
           text: 'Remover Agendamento',

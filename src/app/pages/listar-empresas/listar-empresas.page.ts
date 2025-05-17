@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PreferencesService } from 'src/app/services/preferences.service';
 import { Router } from '@angular/router';
-import { LoadingController, ToastController } from '@ionic/angular';
+import { LoadingController, ToastController,ActionSheetController } from '@ionic/angular';
 
 @Component({
   selector: 'app-listar-empresas',
@@ -23,6 +23,7 @@ export class ListarEmpresasPage implements OnInit {
     private preferencesService: PreferencesService,
     private router: Router,
     private loadingCtrl: LoadingController, 
+    private actionSheetCtrl: ActionSheetController,
     private toastController: ToastController
   ) { }
 
@@ -57,7 +58,7 @@ export class ListarEmpresasPage implements OnInit {
           action: 'listar_empresas',
           busca: '' // ou algum termo de busca
         })
-      });
+      }); 
 
       const data = await response.json();
       if (data.status === 200 && data.empresas && data.empresas.length) {
@@ -126,5 +127,40 @@ export class ListarEmpresasPage implements OnInit {
       position: 'top'
     });
     toast.present();
+  }
+
+  async presentActionSheet(empresa: any) {
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: 'Ações',
+      buttons: [
+        {
+          icon: 'trash',
+          text: 'Remover Empresa',
+          role: 'destructive',
+          handler: () => {
+            if(confirm('Tem certeza que deseja remover essa empresa?')){
+              this.cancelarEmpresa(empresa);
+            }
+            
+          },
+          data: {
+            action: 'delete',
+          },
+        },
+        {
+          icon: 'close',
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            // Apenas fecha o ActionSheet
+          },
+          data: {
+            action: 'cancel',
+          },
+        },
+      ],
+    });
+
+    await actionSheet.present();
   }
 }

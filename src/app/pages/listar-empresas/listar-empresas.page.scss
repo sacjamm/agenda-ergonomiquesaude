@@ -1,0 +1,82 @@
+ ion-content {
+     ion-list {
+         ion-item-sliding {
+             box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2) !important;
+             margin-bottom: 10px !important;
+             border-left: 1px solid #54acb4 !important;
+             border-top-left-radius: 10px !important;
+             border-bottom-left-radius: 10px !important;
+         }
+
+         ion-item {
+             ion-icon.icone-business {
+                 margin-inline-end: 10px !important;
+                 color: #54acb4 !important;
+                 font-size: 3.5rem;
+             }
+
+             ion-label {
+                 margin-top: 5px;
+                 margin-bottom: 5px;
+
+                 p.data {
+                     font-size: 1rem !important;
+                     color: #666 !important;
+                     line-height: 1 !important;
+                     margin-bottom: 2px;
+                 }
+
+                 p.colaborador {
+                     font-size: 0.900rem !important;
+                     color: #555 !important;
+                 }
+
+                 p.profissional {
+                     font-size: 0.800rem !important;
+                     color: hsl(0, 0%, 40%) !important;
+                     line-height: 1.3 !important;
+                     margin-bottom: 2px;
+                 }
+
+                 p.empresa {
+                     font-size: 0.800rem !important;
+                     color: #666 !important;
+                     line-height: 1.3 !important;
+                     margin-bottom: 2px;
+                 }
+
+                 p.status {
+                     font-size: 0.800rem !important;
+                     line-height: 1.3 !important;
+                     margin-bottom: 2px;
+                 }
+
+                 p.agendado {
+                     color: #069 !important;
+                 }
+
+                 p.em_breve {
+                     color: rgb(153, 0, 145) !important;
+                 }
+
+                 p.expirado {
+                     color: rgb(153, 130, 0) !important;
+                 }
+
+                 p.realizado {
+                     color: #0a0 !important;
+                 }
+
+                 p.cancelado {
+                     color: rgb(153, 0, 0) !important;
+                 }
+
+                 ion-icon.icone-time {
+                     color: #54acb4 !important;
+                 }
+             }
+         }
+     }
+
+     
+ }

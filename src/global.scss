@@ -40,6 +40,7 @@ ion-header {
     ion-toolbar {
 
         --min-height: 96px;
+        padding-top: 20px !important;
 
         ion-menu-button {
             width: 5rem;
@@ -113,4 +114,15 @@ ion-action-sheet .action-sheet-title {
     color: #000 !important;
     border-bottom: 1px solid #ccc !important;
     font-weight: 700 !important;
+}
+
+ion-content{
+    ion-fab-button {
+         width: 76px !important;
+         height: 76px !important;
+         ion-icon{
+            font-size: 36px !important;
+         }
+         
+     }
 }

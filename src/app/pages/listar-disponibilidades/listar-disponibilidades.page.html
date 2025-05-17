@@ -10,7 +10,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-no-padding">
+<ion-content class="ion-padding">
 
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" *ngIf="disponibilidades.length > 0">
     <ion-refresher-content></ion-refresher-content>
@@ -18,14 +18,14 @@
 
   <div class="listar-disponibilidades">
     <ion-card *ngFor="let disp of disponibilidades">
-      <ion-card-header>
+      <ion-card-header> 
         <ion-card-title>Empresa: {{ disp.razao_social }}</ion-card-title>
         <ion-card-subtitle>CNPJ: {{ disp.cnpj }}</ion-card-subtitle>
       </ion-card-header>
 
-      <ion-card-content class="ion-padding-disp">
+      <ion-card-content>
         <ion-list> 
-          <ion-item lines="none" class="ion-no-padding no-border">
+          <ion-item lines="none" class="ion-padding-disp">
             <div class="unread-indicator-wrapper">
               <ion-icon color="medium" name="calendar" size="large"></ion-icon>
             </div>
@@ -98,8 +98,8 @@
               <ion-icon name="time" color="light"></ion-icon> Horários
             </ion-button>
           </ion-buttons>
-          <ion-title color="success">
-            Profissional: {{ disp.display_name }}
+          <ion-title color="success" class="size-text">
+           {{ disp.display_name }}
           </ion-title>
           <ion-buttons slot="end">
             <ion-button fill="clear" size="small" (click)="removerDisponibilidade(disp)">

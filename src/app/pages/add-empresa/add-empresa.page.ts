@@ -33,6 +33,14 @@ export class AddEmpresaPage implements OnInit {
     }
   }
 async salvarUser(){ 
+  if(!this.cnpj){
+    this.presentToast('Digite o CNPJ da empresa','warning');
+    return;
+  }
+  if(!this.razao_social){
+    this.presentToast('Digite a Razão Social da empresa','warning');
+    return;
+  }
   const payload = {
     action: 'add_usuario',
     cnpj: this.cnpj,
@@ -80,7 +88,7 @@ async salvarUser(){
       message,
       duration: 2500,
       color,
-      position: 'top'
+      position: 'bottom'
     });
     return toast.present();
   }

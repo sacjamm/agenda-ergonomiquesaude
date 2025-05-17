@@ -8,9 +8,9 @@
     </ion-buttons>
     <ion-title>Listar Agendamentos</ion-title>
   </ion-toolbar>
-</ion-header> 
+</ion-header>  
 
-<ion-content class="ion-no-padding">
+<ion-content class="ion-padding">
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
@@ -18,7 +18,7 @@
   <ion-list *ngIf="agendamentos.length > 0">
     <ion-item-sliding *ngFor="let agendamento of agendamentos">
       <ion-item lines="none" (click)="presentActionSheet(agendamento)">
-        <ion-icon name="calendar" slot="start" size="large" class="icone-calendario"></ion-icon>
+        <ion-icon name="calendar" slot="start" class="icone-calendario"></ion-icon>
         <ion-label>
           <p class="data">
             <strong>

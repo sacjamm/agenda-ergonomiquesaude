@@ -36,19 +36,39 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
 
-html, body, ion-app, ion-content {
-  width: 100vw;
-  height: 100vh;
-  min-width: 100vw;
-  min-height: 100vh;
-  max-width: 100vw;
-  max-height: 100vh;
-}
-
 ion-header {
     ion-toolbar {
+
+        --min-height: 96px;
+
+        ion-menu-button {
+            width: 5rem;
+            height: 5rem;
+            font-size: 2.9rem;
+        }
+
+        ion-back-button {
+            width: 6rem;
+            height: 6rem;
+            --icon-font-size: 2.9rem;
+        }
+
+        .back-button-has-icon-only {
+            min-width: 98px;
+            min-height: 98px;
+        }
+
         ion-menu-button.in-toolbar {
             color: #fff !important;
+        }
+
+        ion-title {
+            font-size: 1.95rem;
+        }
+
+        ion-icon {
+            font-size: 1.95rem;
+            margin-left: 10px;
         }
 
         --background: #54acb4 !important;
@@ -61,16 +81,15 @@ ion-button.button-solid {
 }
 
 ion-toolbar {
-    
+
     ion-buttons {
-        
+
         ion-button.btn-hora {
             --background: #54acb4 !important;
             --color: #fff !important;
         }
     }
 }
-
 
 ion-alert .alert-checkbox-button.select-mes .alert-checkbox-label {
     color: #2196f3 !important;
@@ -95,4 +114,3 @@ ion-action-sheet .action-sheet-title {
     border-bottom: 1px solid #ccc !important;
     font-weight: 700 !important;
 }
-

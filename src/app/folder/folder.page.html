@@ -8,9 +8,9 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-no-padding">
+<ion-content class="ion-padding">
 
-  <div id="container" [ngStyle]="{ top: !possuiAgenda ? '50%' : '40%' }">
+  <div id="container">
     <div *ngIf="isColaborador">
       <ion-icon class="icone-calendario" name="today" *ngIf="!possuiAgenda"></ion-icon>
       <p class="p-calendario" *ngIf="!possuiAgenda">Se você ainda não agendou</p>
@@ -27,56 +27,39 @@
     </div>
 
 
-  </div>
-  
-
-
-  <div *ngIf="isAdmin">
-
-
-    <ion-grid>
-      <ion-row>
-        <ion-col size="6" size-md="6" size-lg="6">
-          <ion-button routerLink="/listar-disponibilidades" fill="solid" color="primary" expand="block">
-            <ion-icon name="calendar" slot="start"></ion-icon>
-            <ion-label>Ver Disponibilidades</ion-label>
-          </ion-button>
-        </ion-col>
-        <ion-col size="6" size-md="6" size-lg="6">
-          <ion-button routerLink="/add-disponibilidade" fill="solid" color="success" expand="block">
-            <ion-icon name="add" color="light" slot="start"></ion-icon>
-            <ion-label color="light">Add Disponibilidade</ion-label>
-          </ion-button>
-        </ion-col>
-        <ion-col size="6" size-md="6" size-lg="6">
-          <ion-button routerLink="/listar-empresas" fill="solid" color="tertiary" expand="block">
-            <ion-icon name="business" slot="start"></ion-icon>
-            <ion-label>Ver Empresas</ion-label>
-          </ion-button>
-        </ion-col>
-        <ion-col size="6" size-md="6" size-lg="6">
-          <ion-button routerLink="/add-empresa" fill="solid" color="secondary" expand="block">
-            <ion-icon name="add" slot="start"></ion-icon>
-            <ion-label>Add Empresa</ion-label>
-          </ion-button>
-        </ion-col>
-        <ion-col size="6" size-md="6" size-lg="6">
-          <ion-button routerLink="/listar-agendamentos" fill="solid" color="danger" expand="block">
-            <ion-icon name="calendar" slot="start"></ion-icon>
-            <ion-label>Ver Agendamentos</ion-label>
-          </ion-button>
-        </ion-col>
-        <ion-col size="6" size-md="4" size-lg="2"></ion-col>
-      </ion-row>
-    </ion-grid>
 
 
 
+    <div *ngIf="isAdmin">
+
+      <ion-button routerLink="/listar-agendamentos" fill="solid" color="danger" expand="block" size="large">
+        <ion-icon name="calendar" slot="start"></ion-icon>
+        <ion-label>Ver Agendamentos</ion-label>
+      </ion-button>
+
+      <ion-button routerLink="/listar-disponibilidades" fill="solid" color="primary" expand="block" size="large">
+        <ion-icon name="calendar" slot="start"></ion-icon>
+        <ion-label>Ver Disponibilidades</ion-label>
+      </ion-button>
+
+      <ion-button routerLink="/add-disponibilidade" fill="solid" color="success" expand="block" size="large">
+        <ion-icon name="add" color="light" slot="start"></ion-icon>
+        <ion-label color="light">Add Disponibilidade</ion-label>
+      </ion-button>
+
+      <ion-button routerLink="/listar-empresas" fill="solid" color="tertiary" expand="block" size="large">
+        <ion-icon name="business" slot="start"></ion-icon>
+        <ion-label>Ver Empresas</ion-label>
+      </ion-button>
+
+      <ion-button routerLink="/add-empresa" fill="solid" color="secondary" expand="block" size="large">
+        <ion-icon name="add" slot="start"></ion-icon>
+        <ion-label>Add Empresa</ion-label>
+      </ion-button>
+
+      
 
 
-
-
-
-
+    </div>
   </div>
 </ion-content>

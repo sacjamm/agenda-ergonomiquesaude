@@ -8,6 +8,7 @@ ion-card-header {
     padding-bottom: 7px !important;
 
     ion-card-title {
+        font-size: 1rem;
         font-weight: 600 !important;
         --color: #fff !important;
     }
@@ -65,15 +66,16 @@ ion-item {
     text-align: center !important;
     color: #888 !important;
 }
+
 .unread-indicator-wrapper {
     -webkit-margin-end: 5px !important;
     margin-inline-end: 5px !important;
 }
 
 ion-chip {
-  min-height: 22px !important;
+    min-height: 22px !important;
 
-  -webkit-margin-start: 1px !important;
+    -webkit-margin-start: 1px !important;
     margin-inline-start: 1px !important;
     -webkit-margin-end: 1px !important;
     margin-inline-end: 1px !important;
@@ -87,3 +89,19 @@ ion-chip {
     padding-bottom: 3px !important;
 }
 
+.size-text {
+    font-size: 0.850rem;
+    color: #54acb4 !important;
+    font-weight: 700;
+    font-style: italic;
+    text-decoration: underline;
+}
+
+ion-card-content {
+    -webkit-padding-start: 0px;
+    padding-inline-start: 0px;
+    -webkit-padding-end: 0px;
+    padding-inline-end: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}

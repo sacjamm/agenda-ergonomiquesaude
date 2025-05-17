@@ -40,6 +40,9 @@
               <ion-note color="medium">
                 Duração: {{ disp.intervalo_disponibilidade }} min
               </ion-note>
+
+
+
             </div>
           </ion-item>
         </ion-list>
@@ -47,10 +50,18 @@
         <ion-grid [@fadeInOut] style="background: #54acb4 !important;"
           *ngIf="gridView && disp.disponibilidade_id === disponibilidadeSelecionadaId">
           <ion-row>
-            <ion-col size="6">
+            <ion-col size="5">
               <ion-title class="manha">Manhã</ion-title>
             </ion-col>
-            <ion-col size="6">
+            <ion-col size="2">
+              <ion-button color="danger" class="btn-fechar"
+                *ngIf="disponibilidadeSelecionadaId === disp.disponibilidade_id"
+                (click)="fecharHorarios(cardDisponibilidadeRef)">
+                <ion-icon name="chevron-down" color="light"></ion-icon> Fechar
+              </ion-button>
+
+            </ion-col>
+            <ion-col size="5">
               <ion-title class="tarde">Tarde</ion-title>
             </ion-col>
           </ion-row>
@@ -94,17 +105,13 @@
       </ion-card-content>
       <div class="ion-padding-disp">
         <ion-toolbar>
-          <ion-buttons slot="start" *ngIf="disponibilidadeSelecionadaId === disp.disponibilidade_id">
-            <ion-button fill="clear" class="btn-fechar" size="small" (click)="fecharHorarios(cardDisponibilidadeRef)">
-              <ion-icon name="close" color="light"></ion-icon> Fechar
-            </ion-button>
-          </ion-buttons>
+
           <ion-buttons slot="start" *ngIf="disponibilidadeSelecionadaId !== disp.disponibilidade_id">
             <ion-button class="btn-hora" size="small" (click)="verHorarios(disp,cardDisponibilidadeRef)">
               <ion-icon name="time" color="light"></ion-icon> Horários
             </ion-button>
           </ion-buttons>
-          
+
 
 
           <ion-title color="success" class="size-text">

@@ -36,6 +36,17 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
 
+ion-app {
+    width: 100%;
+    margin: 0 auto;
+}
+
+@media (min-width: 481px) {
+    ion-app {
+        max-width: 480px;
+    }
+}
+
 ion-header {
     ion-toolbar {
 
@@ -90,10 +101,18 @@ ion-toolbar {
             --color: #fff !important;
         }
 
-        ion-button.btn-fechar {
-            --background: #d41d1d !important;
-            --color: #fff !important;
-        }
+
+    }
+}
+
+ion-card-content {
+    ion-button.btn-fechar {
+        --padding-top: 0px;
+        --padding-bottom: 0px;
+        --padding-start: 0.4em;
+        --padding-end: 0.4em;
+        min-height: 15px;
+        font-size: 0.375rem;
     }
 }
 
@@ -121,13 +140,14 @@ ion-action-sheet .action-sheet-title {
     font-weight: 700 !important;
 }
 
-ion-content{
+ion-content {
     ion-fab-button {
-         width: 76px !important;
-         height: 76px !important;
-         ion-icon{
+        width: 76px !important;
+        height: 76px !important;
+
+        ion-icon {
             font-size: 36px !important;
-         }
-         
-     }
+        }
+
+    }
 }

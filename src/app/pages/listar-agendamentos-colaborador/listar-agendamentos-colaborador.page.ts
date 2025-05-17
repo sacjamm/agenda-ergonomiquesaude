@@ -13,7 +13,7 @@ export class ListarAgendamentosColaboradorPage implements OnInit {
 
   public agendamentos: any[] = [];
   public usuario_id: number = 0;
-  public empresa_id: number = 0;
+  public empresa_id: number = 0; 
 
   constructor(
     private preferencesService: PreferencesService,
@@ -98,7 +98,7 @@ export class ListarAgendamentosColaboradorPage implements OnInit {
             usuario_id: this.usuario_id,
             action: 'remover_agendamento',
             agendamentoID: agendamento.agendamentoID
-          })
+          }) 
         }).then(response => response.json())
           .then(data => {
             loading.dismiss();

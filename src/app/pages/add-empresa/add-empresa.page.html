@@ -1,0 +1,28 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end"> 
+      <ion-back-button style="display: inline;" defaultHref="/listar-empresas"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Adicionar empresa</ion-title>
+  </ion-toolbar>
+</ion-header>
+ 
+<ion-content class="ion-padding">
+
+  <ion-input type="text" [(ngModel)]="cnpj" label="Informe o CNPJ" label-placement="floating" fill="outline" placeholder="Informe o CNPJ"
+    (ionInput)="formatarCNPJ($event)"
+    maxlength="18"></ion-input>
+<br>
+  <ion-input type="text" [(ngModel)]="razao_social" label="Informe a razão social" label-placement="floating" fill="outline" placeholder="Informe a razão social"></ion-input>
+
+  <ion-input type="hidden" style="display: none;" [(ngModel)]="agenda_funcao_usuario" value="representante"></ion-input>
+
+<ion-button expand="block" size="large" (click)="salvarUser()" style="margin-top: 20px;">
+    <ion-icon slot="start" name="save"></ion-icon>
+    Salvar empresa
+  </ion-button>
+
+</ion-content> 

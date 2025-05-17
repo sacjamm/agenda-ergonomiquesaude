@@ -12,7 +12,7 @@
 
 <ion-content class="ion-padding">
 
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" *ngIf="disponibilidades.length > 0">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
@@ -24,7 +24,7 @@
       </ion-card-header>
 
       <ion-card-content class="ion-padding-disp">
-        <ion-list>
+        <ion-list> 
           <ion-item lines="none" class="ion-no-padding no-border">
             <div class="unread-indicator-wrapper">
               <ion-icon color="medium" name="calendar" size="large"></ion-icon>
@@ -120,7 +120,7 @@
   text-align: center;
 ">
   <ion-icon name="today" style="color:#cccccc; font-size: 180px;"></ion-icon>
-  <p class="ion-text-wrap">Não existem disponibilidades cadastradas no momento.</p>
+  <p class="ion-text-wrap" style="color:#cccccc;">Não existem disponibilidades cadastradas no momento.</p>
 </div>
 
   <ion-button expand="block" (click)="carregarMais()" *ngIf="disponibilidades.length > 0"

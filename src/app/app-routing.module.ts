@@ -29,11 +29,27 @@ const routes: Routes = [
   },
   {
     path: 'add-disponibilidade',
-    loadChildren: () => import('./pages/add-disponibilidade/add-disponibilidade.module').then( m => m.AddDisponibilidadePageModule)
+    loadChildren: () => import('./pages/add-disponibilidade/add-disponibilidade.module').then( m => m.AddDisponibilidadePageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'listar-disponibilidades',
-    loadChildren: () => import('./pages/listar-disponibilidades/listar-disponibilidades.module').then( m => m.ListarDisponibilidadesPageModule)
+    loadChildren: () => import('./pages/listar-disponibilidades/listar-disponibilidades.module').then( m => m.ListarDisponibilidadesPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'listar-empresas',
+    loadChildren: () => import('./pages/listar-empresas/listar-empresas.module').then( m => m.ListarEmpresasPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'add-empresa',
+    loadChildren: () => import('./pages/add-empresa/add-empresa.module').then( m => m.AddEmpresaPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'listar-agendamentos',
+    loadChildren: () => import('./pages/listar-agendamentos/listar-agendamentos.module').then( m => m.ListarAgendamentosPageModule)
   }
 ];
 

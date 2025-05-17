@@ -76,7 +76,7 @@ export class AddAgendamentoColaboradorPage implements OnInit {
       await loading.dismiss();
     }
   }
-
+ 
   async onProfissionalChange() {
     this.datasDisponiveis = [];
     this.dataSelecionada = null;
@@ -213,7 +213,7 @@ export class AddAgendamentoColaboradorPage implements OnInit {
   } catch (error) {
     this.presentToast('Erro ao conectar ao servidor.','danger');
   }
-  }
+  } 
 
   async presentAlert(msg: string) {
     const alert = await this.alertController.create({

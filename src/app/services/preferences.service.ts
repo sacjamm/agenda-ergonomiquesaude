@@ -38,7 +38,12 @@ export class PreferencesService {
 
   async getUsuarioLogado(): Promise<any | null> {
     const data = await this.getLoginData();
-    return data.usuario;
+    if(data && data.usuario){
+      return data.usuario;
+    }else{
+      return false;
+    }
+    
   }
 
   async getLoginData(): Promise<any | null> {

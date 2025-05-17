@@ -1,0 +1,57 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-back-button style="display: inline;" defaultHref="/folder/inbox"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Listar empresas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list *ngIf="empresas.length > 0">
+    <ion-item-sliding *ngFor="let empresa of empresas">
+      <ion-item lines="inset">
+        <ion-icon name="business" slot="start"></ion-icon>
+        <ion-label style="font-size: 12px;">{{ empresa.razao_social }} <br> {{ empresa.cnpj }}</ion-label>
+        <ion-icon name="chevron-back" slot="end"></ion-icon>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="cancelarEmpresa(empresa)" expandable="true">
+          <ion-icon slot="icon-only" name="trash" size="large" class="icone-trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list> 
+
+
+  <div *ngIf="empresas.length === 0" style="
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 300px; /* ou 100%, ou outro valor que se adapte ao seu layout */
+  text-align: center;
+">
+  <ion-icon name="business" style="color:#cccccc; font-size: 180px;"></ion-icon>
+  <p class="ion-text-wrap" style="color:#cccccc;">Nenhuma empresa encontrada.</p>
+</div>
+
+  <ion-button expand="block" (click)="carregarMais()" *ngIf="empresas.length > 0"
+    [disabled]="fimDaLista || carregando">
+    Carregar mais
+  </ion-button>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button color="primary" routerLink="/add-empresa">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

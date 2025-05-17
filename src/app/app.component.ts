@@ -34,6 +34,8 @@ export class AppComponent implements OnInit {
       this.appPages = [
         { title: 'Home', url: '/folder/inbox', icon: 'home' },
         { title: 'Disponibilidades', url: '/listar-disponibilidades', icon: 'calendar' },
+         { title: 'Empresas', url: '/listar-empresas', icon: 'business' },
+          { title: 'Agendamentos', url: '/listar-agendamentos', icon: 'calendar' },
       ];
     } else {
       this.appPages = [

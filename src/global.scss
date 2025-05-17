@@ -101,3 +101,9 @@ ion-checkbox[labelPlacement="stacked"] .label-text-wrapper {
 ::ng-deep ion-checkbox[labelPlacement="stacked"] .label-text-wrapper {
     margin-bottom: 10px !important;
 }
+
+ion-action-sheet .action-sheet-title {
+    color: #000 !important;
+    border-bottom: 1px solid #ccc !important;
+    font-weight: 700 !important;
+}

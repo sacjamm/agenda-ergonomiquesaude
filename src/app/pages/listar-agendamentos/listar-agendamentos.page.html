@@ -6,18 +6,18 @@
     <ion-buttons slot="end">
       <ion-back-button style="display: inline;" defaultHref="/folder/inbox"></ion-back-button>
     </ion-buttons>
-    <ion-title>Meus Agendamentos</ion-title>
+    <ion-title>Listar Agendamentos</ion-title>
   </ion-toolbar>
 </ion-header> 
 
 <ion-content class="ion-padding">
-  <ion-refresher slot="fixed" (ionRefresh)="listarAgendamentos($event)">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
  
   <ion-list *ngIf="agendamentos.length > 0">
     <ion-item-sliding *ngFor="let agendamento of agendamentos">
-      <ion-item lines="none">
+      <ion-item lines="none" (click)="presentActionSheet(agendamento)">
         <ion-icon name="calendar" slot="start" size="large" class="icone-calendario"></ion-icon>
         <ion-label>
           <p class="data">
@@ -34,23 +34,17 @@
           <p class="empresa"><strong>Empresa:</strong> {{ agendamento.razao_social }}</p>
           <p [ngClass]="'status ' + agendamento.status"><strong>Status:</strong> {{ agendamento.status }}</p>
         </ion-label>
-        <ion-icon name="chevron-back" slot="end"></ion-icon>
+        <ion-icon name="chevron-forward" slot="end"></ion-icon>
       </ion-item>
-      <ion-item-options side="end">
-        <ion-item-option color="danger" (click)="cancelarAgendamento(agendamento)" expandable="true">
-          <ion-icon slot="icon-only" name="trash" size="large" class="icone-trash"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
+      
     </ion-item-sliding>
   </ion-list>
   <ion-text *ngIf="!agendamentos.length">
     <p style="text-align:center;margin-top:2rem;">Nenhum agendamento encontrado.</p>
   </ion-text>
 
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button color="primary" routerLink="/add-agendamento-colaborador">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>    
-  </ion-fab>
- 
+ <ion-button expand="block" (click)="carregarMais()" *ngIf="agendamentos.length > 0"
+    [disabled]="fimDaLista || carregando">
+    Carregar mais
+  </ion-button>
 </ion-content>

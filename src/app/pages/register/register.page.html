@@ -13,13 +13,20 @@
   ">
     <ion-card style="padding: 0px;">
       <ion-card-header>
-        <ion-card-title>Faça seu login</ion-card-title>
-        <ion-card-subtitle>E agende sua consulta!</ion-card-subtitle>
+        <ion-card-title>Cadastre-se já!</ion-card-title>
+        <ion-card-subtitle>É rápido e fácil!</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
-        <form (submit)="login($event)">
+        <form (submit)="cadastro($event)">
+          <ion-input type="text" size="large" label="CNPJ" label-placement="floating" fill="outline"
+            placeholder="Digite o CNPJ da empresa" required [(ngModel)]="cnpj" name="cnpj"
+            (ionInput)="formatarCNPJ($event)" maxlength="18"></ion-input>
+          <br>
+          <ion-input type="text" size="large" label="Nome completo" label-placement="floating" fill="outline"
+            placeholder="Digite o seu nome" required [(ngModel)]="nome" name="nome"></ion-input>
+          <br>
           <ion-input type="email" size="large" label="E-mail" label-placement="floating" fill="outline"
-            placeholder="Digite o e-mail" required [(ngModel)]="email" name="email"></ion-input>
+            placeholder="Digite o seu e-mail" required [(ngModel)]="email" name="email"></ion-input>
           <br>
           <ion-input type="password" size="large" label="Senha" label-placement="floating" fill="outline"
             placeholder="Digite a senha" required [(ngModel)]="senha" name="senha">
@@ -27,14 +34,14 @@
           </ion-input>
 
           <ion-button expand="block" type="submit">
-            <ion-icon slot="start" name="log-in-outline" size="large"></ion-icon>
-            Entrar
+            <ion-icon slot="start" name="log-out-outline" size="large"></ion-icon>
+            Cadastrar
           </ion-button>
         </form>
 
-        <ion-button routerLink="/register" color="danger">
-          <ion-icon name="log-out"></ion-icon>
-          <ion-label>Cadastre-se</ion-label>
+        <ion-button routerLink="/login" color="tertiary">
+          <ion-icon name="log-in"></ion-icon>
+          <ion-label>Login</ion-label>
         </ion-button>
       </ion-card-content>
     </ion-card>

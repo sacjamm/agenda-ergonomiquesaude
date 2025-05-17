@@ -51,6 +51,10 @@ const routes: Routes = [
     path: 'listar-agendamentos',
     loadChildren: () => import('./pages/listar-agendamentos/listar-agendamentos.module').then( m => m.ListarAgendamentosPageModule),
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'register',
+    loadChildren: () => import('./pages/register/register.module').then( m => m.RegisterPageModule)
   }
 ];
 

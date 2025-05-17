@@ -4,13 +4,15 @@ import { Router } from '@angular/router';
 import { MenuController, ToastController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  selector: 'app-register',
+  templateUrl: './register.page.html',
+  styleUrls: ['./register.page.scss'],
   standalone: false,
 })
-export class LoginPage implements OnInit {
- 
+export class RegisterPage implements OnInit {
+
+  cnpj: string = '';
+  nome: string = '';
   email: string = '';
   senha: string = '';
   loading: boolean = false;
@@ -32,8 +34,7 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
   }
-
-  async login(event: Event) {
+  async cadastro(event: any) {
     await this.preferencesService.logout();
     event.preventDefault();
     this.loading = true;
@@ -46,9 +47,11 @@ export class LoginPage implements OnInit {
         },
         mode: 'cors', // Parâmetro CORS
         body: JSON.stringify({
-          username: this.email, // pode ser email ou usuário
-          password: this.senha,
-          action: 'login_usuario'
+          email: this.email, // pode ser email ou usuário
+          senha: this.senha,
+          cnpj: this.cnpj,
+          nome: this.nome,
+          action: 'add_usuario'
         })
       });
 
@@ -57,9 +60,9 @@ export class LoginPage implements OnInit {
       if (data.status === 200 && data.token && data.usuario) {
         // Salva todos os dados retornados do endpoint
         await this.preferencesService.set('login_data', data);
-              window.location.href = '/folder/inbox';
+        window.location.href = '/folder/inbox';
         //this.router.navigate(['/folder/inbox']);
-        
+
       } else {
         this.presentToast(data.message || 'E-mail/Usuário ou senha inválidos.', 'danger');
       }
@@ -69,7 +72,9 @@ export class LoginPage implements OnInit {
       this.loading = false;
     }
   }
-async presentToast(message: string, color: string = 'primary') {
+
+
+  async presentToast(message: string, color: string = 'primary') {
     const toast = await this.toastController.create({
       message,
       duration: 2500,
@@ -77,5 +82,22 @@ async presentToast(message: string, color: string = 'primary') {
       position: 'top'
     });
     return toast.present();
+  }
+
+  formatarCNPJ(event: any): void {
+    const valor = event.detail.value;
+    this.cnpj = this.mascararCNPJ(valor);
+  }
+  mascararCNPJ(cnpj: string): string {
+    cnpj = cnpj.replace(/\D/g, ''); // Remove tudo que não for dígito
+
+    if (cnpj.length <= 14) {
+      cnpj = cnpj.replace(/^(\d{2})(\d)/, '$1.$2');
+      cnpj = cnpj.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+      cnpj = cnpj.replace(/\.(\d{3})(\d)/, '.$1/$2');
+      cnpj = cnpj.replace(/(\d{4})(\d)/, '$1-$2');
+    }
+
+    return cnpj;
   }
 }

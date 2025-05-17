@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { PreferencesService } from '../services/preferences.service';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
-import { faBusinessTime, faPlus, faCalendar, faBuilding } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-folder',
@@ -12,11 +11,6 @@ import { faBusinessTime, faPlus, faCalendar, faBuilding } from '@fortawesome/fre
   standalone: false, 
 })
 export class FolderPage implements OnInit {
-
-  faBusinessTime = faBusinessTime;
-  faPlus = faPlus;
-  faCalendar = faCalendar;
-  faBuilding = faBuilding;
 
   public folder!: string;
   public isColaborador = false;

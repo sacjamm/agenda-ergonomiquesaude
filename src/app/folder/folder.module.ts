@@ -8,11 +8,9 @@ import { FolderPageRoutingModule } from './folder-routing.module';
 
 import { FolderPage } from './folder.page';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   imports: [
-    FontAwesomeModule,
     CommonModule,
     FormsModule,
     IonicModule,

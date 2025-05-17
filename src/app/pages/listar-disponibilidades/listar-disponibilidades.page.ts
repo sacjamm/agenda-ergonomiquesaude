@@ -1,13 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { PreferencesService } from 'src/app/services/preferences.service';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-listar-disponibilidades',
   templateUrl: './listar-disponibilidades.page.html',
   styleUrls: ['./listar-disponibilidades.page.scss'],
   standalone: false,
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-10px)' }),
+        animate('250ms ease-out', style({ opacity: 1, transform: 'translateY(0)' })),
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({ opacity: 0, transform: 'translateY(-10px)' })),
+      ]),
+    ])
+  ]
 })
 export class ListarDisponibilidadesPage implements OnInit {
 
@@ -23,6 +35,8 @@ export class ListarDisponibilidadesPage implements OnInit {
   public fimDaLista = false;
 
   gridView: boolean = false;
+
+  butonView: boolean = false;
 
   public horariosSelecionados: any[] = [];
   public disponibilidadeSelecionadaId: number | null = null;
@@ -115,8 +129,11 @@ export class ListarDisponibilidadesPage implements OnInit {
     return dias[dataObj.getDay()];
   }
 
-  async verHorarios(disponivel: any) {
+  async verHorarios(disponivel: any, cardElement: any) {
     this.disponibilidadeSelecionadaId = disponivel.disponibilidade_id;
+    setTimeout(() => {
+      cardElement?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 500);
     this.horariosSelecionados = [];
     this.gridView = true;
     try {
@@ -213,7 +230,7 @@ export class ListarDisponibilidadesPage implements OnInit {
             this.disponibilidadeSelecionadaId = null;
             this.horariosSelecionados = [];
             this.gridView = false;
-          } 
+          }
           this.presentToast(data.message, 'success');
         } else {
           this.presentToast(data.message, 'danger');
@@ -233,4 +250,13 @@ export class ListarDisponibilidadesPage implements OnInit {
     });
     toast.present();
   }
+
+  fecharHorarios(cardElement: any) {
+  const nativeEl = cardElement.nativeElement ? cardElement.nativeElement : cardElement;
+  const y = nativeEl.getBoundingClientRect().top + window.scrollY - 56;
+  this.disponibilidadeSelecionadaId = null;
+  setTimeout(() => {
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  }, 500);
+}
 }

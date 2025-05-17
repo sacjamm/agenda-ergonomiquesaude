@@ -73,20 +73,24 @@ ion-item {
 }
 
 ion-chip {
-    min-height: 22px !important;
+    min-height: 32px !important;
 
-    -webkit-margin-start: 1px !important;
-    margin-inline-start: 1px !important;
+    -webkit-margin-start: 0px !important;
+    margin-inline-start: 0px !important;
     -webkit-margin-end: 1px !important;
     margin-inline-end: 1px !important;
-    margin-top: 2px !important;
-    margin-bottom: 2px !important;
+    margin-top: 3px !important;
+    margin-bottom: 3px !important;
     -webkit-padding-start: 5px !important;
     padding-inline-start: 5px !important;
     -webkit-padding-end: 5px !important;
     padding-inline-end: 5px !important;
-    padding-top: 3px !important;
-    padding-bottom: 3px !important;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+    
+    ion-label{
+        font-weight: 600;
+    }
 }
 
 .size-text {

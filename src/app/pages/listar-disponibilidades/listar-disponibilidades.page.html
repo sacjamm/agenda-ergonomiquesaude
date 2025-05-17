@@ -18,13 +18,14 @@
 
   <div class="listar-disponibilidades">
     <ion-card *ngFor="let disp of disponibilidades">
-      <ion-card-header> 
+      <div #cardDisponibilidadeRef></div>
+      <ion-card-header>
         <ion-card-title>Empresa: {{ disp.razao_social }}</ion-card-title>
         <ion-card-subtitle>CNPJ: {{ disp.cnpj }}</ion-card-subtitle>
       </ion-card-header>
 
       <ion-card-content>
-        <ion-list> 
+        <ion-list>
           <ion-item lines="none" class="ion-padding-disp">
             <div class="unread-indicator-wrapper">
               <ion-icon color="medium" name="calendar" size="large"></ion-icon>
@@ -43,7 +44,7 @@
           </ion-item>
         </ion-list>
 
-        <ion-grid style="background: #54acb4 !important;"
+        <ion-grid [@fadeInOut] style="background: #54acb4 !important;"
           *ngIf="gridView && disp.disponibilidade_id === disponibilidadeSelecionadaId">
           <ion-row>
             <ion-col size="6">
@@ -55,27 +56,27 @@
           </ion-row>
         </ion-grid>
 
-        <ion-grid class="ion-no-padding no-border"
+        <ion-grid [@fadeInOut] class="ion-no-padding no-border"
           *ngIf="gridView && disp.disponibilidade_id === disponibilidadeSelecionadaId">
           <ion-row style="padding-top: 5px !important;padding-bottom: 5px !important;">
-            <ion-col size="6">
+            <ion-col size="6" style="padding-left: 4px;padding-right: 0px !important;">
 
               <ion-chip *ngFor="let hora of horariosSelectedManha()" (click)="removerHorario(hora)">
                 <ion-icon name="time" color="primary"
-                  style="font-size: 13px !important; margin-inline: -4px 3px !important;"></ion-icon>
+                  style="font-size: 17px !important; margin-inline: -4px 4px !important;"></ion-icon>
                 <ion-label>{{ hora.hora }}</ion-label>
                 <ion-icon name="trash" color="danger"
-                  style="font-size: 12px !important; -webkit-margin-start: 3px;margin-inline-start: 3px;"></ion-icon>
+                  style="font-size: 17px !important; -webkit-margin-start: 4px;margin-inline-start: 4px;"></ion-icon>
               </ion-chip>
 
             </ion-col>
-            <ion-col size="6">
+            <ion-col size="6" style="padding-left: 4px;padding-right: 0px !important;">
               <ion-chip *ngFor="let hora of horariosSelectedTarde()" (click)="removerHorario(hora)">
                 <ion-icon name="time" color="primary"
-                  style="font-size: 13px !important; margin-inline: -4px 3px !important;"></ion-icon>
+                  style="font-size: 17px !important; margin-inline: -4px 4px !important;"></ion-icon>
                 <ion-label>{{ hora.hora }}</ion-label>
                 <ion-icon name="trash" color="danger"
-                  style="font-size: 12px !important; -webkit-margin-start: 3px;margin-inline-start: 3px;"></ion-icon>
+                  style="font-size: 17px !important; -webkit-margin-start: 4px;margin-inline-start: 4px;"></ion-icon>
               </ion-chip>
             </ion-col>
           </ion-row>
@@ -93,13 +94,21 @@
       </ion-card-content>
       <div class="ion-padding-disp">
         <ion-toolbar>
-          <ion-buttons slot="start">
-            <ion-button class="btn-hora" size="small" (click)="verHorarios(disp)">
+          <ion-buttons slot="start" *ngIf="disponibilidadeSelecionadaId === disp.disponibilidade_id">
+            <ion-button fill="clear" class="btn-fechar" size="small" (click)="fecharHorarios(cardDisponibilidadeRef)">
+              <ion-icon name="close" color="light"></ion-icon> Fechar
+            </ion-button>
+          </ion-buttons>
+          <ion-buttons slot="start" *ngIf="disponibilidadeSelecionadaId !== disp.disponibilidade_id">
+            <ion-button class="btn-hora" size="small" (click)="verHorarios(disp,cardDisponibilidadeRef)">
               <ion-icon name="time" color="light"></ion-icon> Horários
             </ion-button>
           </ion-buttons>
+          
+
+
           <ion-title color="success" class="size-text">
-           {{ disp.display_name }}
+            {{ disp.display_name }}
           </ion-title>
           <ion-buttons slot="end">
             <ion-button fill="clear" size="small" (click)="removerDisponibilidade(disp)">
@@ -119,9 +128,9 @@
   height: 300px; 
   text-align: center;
 ">
-  <ion-icon name="today" style="color:#cccccc; font-size: 180px;"></ion-icon>
-  <p class="ion-text-wrap" style="color:#cccccc;">Não existem disponibilidades cadastradas no momento.</p>
-</div>
+    <ion-icon name="today" style="color:#cccccc; font-size: 180px;"></ion-icon>
+    <p class="ion-text-wrap" style="color:#cccccc;">Não existem disponibilidades cadastradas no momento.</p>
+  </div>
 
   <ion-button expand="block" (click)="carregarMais()" *ngIf="disponibilidades.length > 0"
     [disabled]="fimDaLista || carregando" size="large">
@@ -131,6 +140,6 @@
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button color="primary" routerLink="/add-disponibilidade">
       <ion-icon name="add"></ion-icon>
-    </ion-fab-button>    
+    </ion-fab-button>
   </ion-fab>
 </ion-content>

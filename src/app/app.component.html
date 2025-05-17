@@ -25,4 +25,40 @@
     </ion-content>
   </ion-menu>
   <ion-router-outlet id="main-content"></ion-router-outlet>
+
+  <div *ngIf="showInstallBanner" class="install-banner" style="
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px 15px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  z-index: 9999;
+  max-width: 300px;
+">
+  <p style="font-size: 12px; margin: 0 0 10px 0;">
+    Adicione Nosso App Na Tela Inicial.
+  </p>
+  <div style="display: flex; justify-content: space-between;">
+    <button (click)="instalarApp()" style="
+      padding: 7px 12px;
+      border-radius: 4px;
+      background: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+    ">Instalar</button>
+
+    <button (click)="fecharBanner()" style="
+      padding: 7px 12px;
+      border-radius: 4px;
+      background: #dc3545;
+      color: white;
+      border: none;
+      cursor: pointer;
+    ">Agora não</button>
+  </div>
+</div>
 </ion-app>

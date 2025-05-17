@@ -73,7 +73,7 @@
             <ion-col size="6" style="padding-left: 4px;padding-right: 0px !important;">
 
               <ion-chip *ngFor="let hora of horariosSelectedManha()" 
-                [color]="hora.agendado ? 'medium' : 'light'"
+                [color]="hora.agendado ? 'medium' : 'tertiary'"
                 [class.disabled-chip]="hora.agendado"
                 (click)="!hora.agendado && removerHorario(hora)">
                 <ion-icon name="time" [color]="hora.agendado ? 'dark' : 'primary'"
@@ -86,7 +86,7 @@
             </ion-col>
             <ion-col size="6" style="padding-left: 4px;padding-right: 0px !important;">
               <ion-chip *ngFor="let hora of horariosSelectedTarde()" 
-                [color]="hora.agendado ? 'medium' : 'light'"
+                [color]="hora.agendado ? 'medium' : 'tertiary'"
                 [class.disabled-chip]="hora.agendado"
                 (click)="!hora.agendado && removerHorario(hora)">
                 <ion-icon name="time"  [color]="hora.agendado ? 'dark' : 'primary'"

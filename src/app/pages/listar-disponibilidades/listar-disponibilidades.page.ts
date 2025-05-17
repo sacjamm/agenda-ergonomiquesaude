@@ -252,11 +252,11 @@ export class ListarDisponibilidadesPage implements OnInit {
   }
 
   fecharHorarios(cardElement: any) {
-  const nativeEl = cardElement.nativeElement ? cardElement.nativeElement : cardElement;
-  const y = nativeEl.getBoundingClientRect().top + window.scrollY - 56;
-  this.disponibilidadeSelecionadaId = null;
-  setTimeout(() => {
-    window.scrollTo({ top: y, behavior: 'smooth' });
-  }, 500);
-}
+    const nativeEl = cardElement.nativeElement ? cardElement.nativeElement : cardElement;
+    const y = nativeEl.getBoundingClientRect().top + window.scrollY - 56;
+    this.disponibilidadeSelecionadaId = null;
+    setTimeout(() => {
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }, 500);
+  }
 }

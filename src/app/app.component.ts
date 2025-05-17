@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
     if (userLogado.nivel === 'assinante' && userLogado.agenda_funcao_usuario === 'colaborador') {
       this.appPages = [
         { title: 'Home', url: '/folder/inbox', icon: 'home' },
+        { title: 'Agendamentos', url: '/listar-agendamentos-colaborador', icon: 'calendar' },
       ];
     } else if (userLogado.nivel === 'admin') {
       this.appPages = [

@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { PreferencesService } from 'src/app/services/preferences.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ActionSheetController, LoadingController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-listar-agendamentos',
   templateUrl: './listar-agendamentos.page.html',
   styleUrls: ['./listar-agendamentos.page.scss'],
-  standalone: false, 
+  standalone: false,
 })
 export class ListarAgendamentosPage implements OnInit {
 
@@ -19,15 +19,28 @@ export class ListarAgendamentosPage implements OnInit {
   public carregando = false;
   public fimDaLista = false;
 
- constructor(
+  constructor(
     private preferencesService: PreferencesService,
     private router: Router,
-    private loadingCtrl: LoadingController, 
-        private toastController: ToastController,
-        private actionSheetCtrl: ActionSheetController
+    private loadingCtrl: LoadingController,
+    private toastController: ToastController,
+    private actionSheetCtrl: ActionSheetController,
+    private route: ActivatedRoute
   ) { }
 
   async ngOnInit() {
+
+    this.route.queryParams.subscribe(async params => {
+      if (params['status'] === 'success') {
+        // Recupera o agendamentoID salvo antes do redirect
+        const agendamentoID = localStorage.getItem('agendamentoID_google');
+        if (agendamentoID) {
+          await this.enviarEventoParaGoogleCalendar(agendamentoID);
+          localStorage.removeItem('agendamentoID_google');
+        }
+      }
+    });
+
     const userLogado = await this.preferencesService.getUsuarioLogado();
     if (userLogado.nivel === 'admin') {
       this.usuario_id = userLogado.id;
@@ -43,7 +56,7 @@ export class ListarAgendamentosPage implements OnInit {
       this.pagina = 1;
       this.fimDaLista = false;
       this.agendamentos = [];
-    }    
+    }
     try {
       const response = await fetch('https://api.ergonomiquesaude.com.br/api/agenda/agenda.php', {
         method: 'POST',
@@ -56,8 +69,8 @@ export class ListarAgendamentosPage implements OnInit {
           empresa_id: this.empresa_id,
           action: 'listar_agendamentos_admin',
           busca: '',
-          pagina:this.pagina,
-          limite:this.limite
+          pagina: this.pagina,
+          limite: this.limite
         })
       });
 
@@ -85,9 +98,9 @@ export class ListarAgendamentosPage implements OnInit {
       this.presentToast('Erro ao conectar ao servidor.', 'danger');
     } finally {
       this.carregando = false;
-    if (event) event.target.complete();
+      if (event) event.target.complete();
     }
-  } 
+  }
 
   doRefresh(event: any) {
     this.listarAgendamentos(true, event);
@@ -126,9 +139,9 @@ export class ListarAgendamentosPage implements OnInit {
           mode: 'cors',
           body: JSON.stringify({
             usuario_id: this.usuario_id,
-            action: 'remover_agendamento',
+            action: 'remover_agendamento_admin',
             agendamentoID: agendamento.agendamentoID
-          }) 
+          })
         }).then(response => response.json())
           .then(data => {
             loading.dismiss();
@@ -146,7 +159,7 @@ export class ListarAgendamentosPage implements OnInit {
       });
     }
   }
-async presentToast(message: string, color: string = 'primary') {
+  async presentToast(message: string, color: string = 'primary') {
     const toast = await this.toastController.create({
       message,
       duration: 2500,
@@ -160,16 +173,25 @@ async presentToast(message: string, color: string = 'primary') {
     const actionSheet = await this.actionSheetCtrl.create({
       header: 'Ações',
       buttons: [
-        {
+        /*{
           icon: 'create',
           text: 'Alterar Status',
+          handler: () => {
+            this.alterarStatusAgendamento(agendamento);
+          },
           data: {
             action: 'alterar_status',
           },
-        },
+        },*/
         {
           icon: 'logo-google',
           text: 'Adicionar ao Google Calendar',
+          handler: () => {
+            if (confirm('Tem certeza que deseja adicionar esse agendamento no Google Calendar?')) {
+
+              this.adicionarAoGoogleCalendar(agendamento);
+            }
+          },
           data: {
             action: 'google',
           },
@@ -178,14 +200,20 @@ async presentToast(message: string, color: string = 'primary') {
           icon: 'trash',
           text: 'Remover Agendamento',
           role: 'destructive',
+          handler: () => {
+            this.cancelarAgendamento(agendamento);
+          },
           data: {
             action: 'delete',
           },
-        },        
+        },
         {
           icon: 'close',
           text: 'Cancelar',
           role: 'cancel',
+          handler: () => {
+            // Apenas fecha o ActionSheet
+          },
           data: {
             action: 'cancel',
           },
@@ -194,5 +222,58 @@ async presentToast(message: string, color: string = 'primary') {
     });
 
     await actionSheet.present();
+  }
+
+  // Exemplo de métodos de callback (implemente conforme sua lógica)
+  alterarStatusAgendamento(agendamento: any) {
+    this.presentToast('Alterar status não implementado.', 'warning');
+    // Implemente aqui a lógica de alteração de status
+  }
+
+  adicionarAoGoogleCalendar(agendamento: any) {
+    // 1. Verifique se já existe token salvo (opcional, pode sempre pedir login Google)
+    // 2. Redirecione para o consentimento Google se necessário
+    // 3. Após consentimento, envie o agendamento para o backend
+
+    // a) Redireciona para o consentimento Google
+    const clientId = '439125110228-8rpggu9vem4aq4i3kbfvsndnpq0idenh.apps.googleusercontent.com';
+    const redirectUri = encodeURIComponent('https://api.ergonomiquesaude.com.br/api/agenda/agenda.php?action=callback_google');
+    const scope = encodeURIComponent('https://www.googleapis.com/auth/calendar.events');
+    const url =
+      `https://accounts.google.com/o/oauth2/v2/auth?` +
+      `client_id=${clientId}` +
+      `&redirect_uri=${redirectUri}` +
+      `&response_type=code` +
+      `&scope=${scope}` +
+      `&access_type=offline` +
+      `&prompt=consent`;
+
+    // Salve o agendamentoID em localStorage para usar depois do callback
+    localStorage.setItem('agendamentoID_google', agendamento.agendamentoID);
+
+    // Redireciona para o Google
+    window.location.href = url;
+  }
+
+  async enviarEventoParaGoogleCalendar(agendamentoID: any) {
+    try {
+      const response = await fetch('https://api.ergonomiquesaude.com.br/api/agenda/agenda.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        mode: 'cors',
+        body: JSON.stringify({
+          action: 'adicionar_google_calendar',
+          agendamentoID: agendamentoID
+        })
+      });
+      const data = await response.json();
+      if (data.status === 200) {
+        this.presentToast('Evento adicionado ao Google Calendar com sucesso!', 'success');
+      } else {
+        this.presentToast(data.message || 'Erro ao adicionar evento ao Google Calendar.', 'danger');
+      }
+    } catch (error) {
+      this.presentToast('Erro ao conectar ao servidor.', 'danger');
+    }
   }
 }

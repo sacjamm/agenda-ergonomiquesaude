@@ -32,7 +32,7 @@
           <p class="colaborador"><strong>Colaborador:</strong> {{ agendamento.display_user }}</p>
           <p class="profissional"><strong>Profissional:</strong> {{ agendamento.display_prof }}</p>
           <p class="empresa"><strong>Empresa:</strong> {{ agendamento.razao_social }}</p>
-          <p [ngClass]="'status ' + agendamento.status"><strong>Status:</strong> {{ agendamento.status }}</p>
+          <p [ngClass]="'status ' + agendamento.status"><strong>Status:</strong> {{ return_status(agendamento.status) }}</p>
         </ion-label>
         <ion-icon name="chevron-back" slot="end"></ion-icon>
       </ion-item>

@@ -195,7 +195,7 @@ export class ListarAgendamentosPage implements OnInit {
           data: {
             action: 'google',
           },
-        }, 
+        },
         {
           icon: 'trash',
           text: 'Remover Agendamento',
@@ -275,5 +275,17 @@ export class ListarAgendamentosPage implements OnInit {
     } catch (error) {
       this.presentToast('Erro ao conectar ao servidor.', 'danger');
     }
+  }
+
+  return_status(status: string): string {
+    const statusMap: Record<string, string> = {
+      agendado: 'Agendado',
+      em_breve: 'Em breve',
+      expirado: 'Expirado',
+      realizado: 'Realizado',
+      cancelado: 'Cancelado'
+    };
+
+    return statusMap[status] || 'Desconhecido';
   }
 }

@@ -72,21 +72,27 @@
           <ion-row style="padding-top: 5px !important;padding-bottom: 5px !important;">
             <ion-col size="6" style="padding-left: 4px;padding-right: 0px !important;">
 
-              <ion-chip *ngFor="let hora of horariosSelectedManha()" (click)="removerHorario(hora)">
-                <ion-icon name="time" color="primary"
+              <ion-chip *ngFor="let hora of horariosSelectedManha()" 
+                [color]="hora.agendado ? 'medium' : 'light'"
+                [class.disabled-chip]="hora.agendado"
+                (click)="!hora.agendado && removerHorario(hora)">
+                <ion-icon name="time" [color]="hora.agendado ? 'dark' : 'primary'"
                   style="font-size: 17px !important; margin-inline: -4px 4px !important;"></ion-icon>
                 <ion-label>{{ hora.hora }}</ion-label>
-                <ion-icon name="trash" color="danger"
+                <ion-icon *ngIf="!hora.agendado" name="trash" color="danger"
                   style="font-size: 17px !important; -webkit-margin-start: 4px;margin-inline-start: 4px;"></ion-icon>
               </ion-chip>
 
             </ion-col>
             <ion-col size="6" style="padding-left: 4px;padding-right: 0px !important;">
-              <ion-chip *ngFor="let hora of horariosSelectedTarde()" (click)="removerHorario(hora)">
-                <ion-icon name="time" color="primary"
+              <ion-chip *ngFor="let hora of horariosSelectedTarde()" 
+                [color]="hora.agendado ? 'medium' : 'light'"
+                [class.disabled-chip]="hora.agendado"
+                (click)="!hora.agendado && removerHorario(hora)">
+                <ion-icon name="time"  [color]="hora.agendado ? 'dark' : 'primary'"
                   style="font-size: 17px !important; margin-inline: -4px 4px !important;"></ion-icon>
                 <ion-label>{{ hora.hora }}</ion-label>
-                <ion-icon name="trash" color="danger"
+                <ion-icon *ngIf="!hora.agendado" name="trash" color="danger"
                   style="font-size: 17px !important; -webkit-margin-start: 4px;margin-inline-start: 4px;"></ion-icon>
               </ion-chip>
             </ion-col>

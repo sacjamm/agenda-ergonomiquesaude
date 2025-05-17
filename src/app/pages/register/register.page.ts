@@ -51,7 +51,7 @@ export class RegisterPage implements OnInit {
           senha: this.senha,
           cnpj: this.cnpj,
           nome: this.nome,
-          action: 'add_usuario'
+          action: 'add_usuario_colaborador'
         })
       });
 

@@ -57,7 +57,7 @@ export class LoginPage implements OnInit {
       if (data.status === 200 && data.token && data.usuario) {
         // Salva todos os dados retornados do endpoint
         await this.preferencesService.set('login_data', data);
-              window.location.href = '/folder/inbox';
+             window.location.href = '/folder/inbox';
         //this.router.navigate(['/folder/inbox']);
         
       } else {

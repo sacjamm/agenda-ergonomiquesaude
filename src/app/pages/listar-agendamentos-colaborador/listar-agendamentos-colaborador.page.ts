@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PreferencesService } from 'src/app/services/preferences.service';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-listar-agendamentos-colaborador',
@@ -18,6 +18,7 @@ export class ListarAgendamentosColaboradorPage implements OnInit {
   constructor(
     private preferencesService: PreferencesService,
     private router: Router,
+    private toastController: ToastController,
     private loadingCtrl: LoadingController
   ) { }
 
@@ -127,5 +128,60 @@ export class ListarAgendamentosColaboradorPage implements OnInit {
     };
 
     return statusMap[status] || 'Desconhecido';
+  }
+
+  GoogleCalendarAgendamento(agendamento: any) {
+    if (confirm('Deseja agendar essa consulta no Google Calendar?')) {
+      const clientId = '439125110228-8rpggu9vem4aq4i3kbfvsndnpq0idenh.apps.googleusercontent.com';
+      const redirectUri = encodeURIComponent('https://api.ergonomiquesaude.com.br/api/agenda/agenda.php?action=callback_google');
+      const scope = encodeURIComponent('https://www.googleapis.com/auth/calendar.events');
+      const url =
+        `https://accounts.google.com/o/oauth2/v2/auth?` +
+        `client_id=${clientId}` +
+        `&redirect_uri=${redirectUri}` +
+        `&response_type=code` +
+        `&scope=${scope}` +
+        `&access_type=offline` +
+        `&prompt=consent`;
+
+      // Salve o agendamentoID em localStorage para usar depois do callback
+      localStorage.setItem('agendamentoID_google', agendamento.agendamentoID);
+
+      // Redireciona para o Google
+      window.location.href = url;
+    }
+
+  }
+
+  async enviarEventoParaGoogleCalendar(agendamentoID: any) {
+    try {
+      const response = await fetch('https://api.ergonomiquesaude.com.br/api/agenda/agenda.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        mode: 'cors',
+        body: JSON.stringify({
+          action: 'adicionar_google_calendar',
+          agendamentoID: agendamentoID
+        })
+      });
+      const data = await response.json();
+      if (data.status === 200) {
+        this.presentToast(data.message, 'success');
+      } else {
+        this.presentToast(data.message || 'Erro ao adicionar evento ao Google Calendar.', 'danger');
+      }
+    } catch (error) {
+      this.presentToast('Erro ao conectar ao servidor.', 'danger');
+    }
+  }
+
+  async presentToast(message: string, color: string = 'primary') {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2500,
+      color,
+      position: 'top'
+    });
+    toast.present();
   }
 }

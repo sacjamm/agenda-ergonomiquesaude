@@ -30,16 +30,7 @@ export class ListarAgendamentosPage implements OnInit {
 
   async ngOnInit() {
 
-    this.route.queryParams.subscribe(async params => {
-      if (params['status'] === 'success') {
-        // Recupera o agendamentoID salvo antes do redirect
-        const agendamentoID = localStorage.getItem('agendamentoID_google');
-        if (agendamentoID) {
-          await this.enviarEventoParaGoogleCalendar(agendamentoID);
-          localStorage.removeItem('agendamentoID_google');
-        }
-      }
-    });
+    
 
     const userLogado = await this.preferencesService.getUsuarioLogado();
     if (userLogado.nivel === 'admin') {

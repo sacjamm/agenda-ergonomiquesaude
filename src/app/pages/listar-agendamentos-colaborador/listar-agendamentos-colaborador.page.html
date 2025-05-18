@@ -28,7 +28,7 @@
             </strong>
             <ion-icon name="time" class="icone-time"></ion-icon>
             {{ agendamento.hora_agendada }}
-          </p>
+          </p> 
           <p class="colaborador"><strong>Colaborador:</strong> {{ agendamento.display_user }}</p>
           <p class="profissional"><strong>Profissional:</strong> {{ agendamento.display_prof }}</p>
           <p class="empresa"><strong>Empresa:</strong> {{ agendamento.razao_social }}</p>
@@ -37,6 +37,9 @@
         <ion-icon name="chevron-back" slot="end"></ion-icon>
       </ion-item>
       <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="GoogleCalendarAgendamento(agendamento)" expandable="true">
+          <ion-icon slot="icon-only" name="calendar" size="large" class="icone-trash"></ion-icon>
+        </ion-item-option>
         <ion-item-option color="danger" (click)="cancelarAgendamento(agendamento)" expandable="true">
           <ion-icon slot="icon-only" name="trash" size="large" class="icone-trash"></ion-icon>
         </ion-item-option>

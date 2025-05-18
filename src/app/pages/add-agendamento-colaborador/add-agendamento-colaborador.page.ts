@@ -204,7 +204,7 @@ export class AddAgendamentoColaboradorPage implements OnInit {
       this.horarioSelecionado = '';
       this.disponibilidade_id=0;
       // Redireciona para a tela desejada (ajuste a rota conforme necessário)
-      this.presentToast('Agendamento realizado com sucesso!','success').then(() => {
+      this.presentToast(data.message,'success').then(() => {
         this.router.navigate(['/listar-agendamentos-colaborador']);
       });
     } else {

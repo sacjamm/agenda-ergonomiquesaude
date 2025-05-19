@@ -152,7 +152,7 @@ export class AddAgendamentoColaboradorPage implements OnInit {
     return dates;
   }
 
-  public isDateEnabled = (dateIsoString: string): boolean => {
+  /*public isDateEnabled = (dateIsoString: string): boolean => {
     const date = dateIsoString.split('T')[0];
     const hoje = new Date();
     const dataSelecionada = new Date(date);
@@ -162,7 +162,24 @@ export class AddAgendamentoColaboradorPage implements OnInit {
     const naoPassou = dataSelecionada >= new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
 
     return disponivel && naoPassou;
-  };
+  };*/
+
+  public isDateEnabled = (dateIsoString: string): boolean => {
+  const date = dateIsoString.split('T')[0];
+  const hoje = new Date();
+  const dataSelecionada = new Date(date);
+
+  // Força o horário para meia-noite para comparar apenas a data
+  const hojeSemHora = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+
+  // Verifica se a data está na lista de disponíveis
+  const disponivel = this.datasDisponiveis.some(d => d.data === date);
+
+  // Permite datas de hoje em diante que estejam na lista
+  const naoPassou = dataSelecionada >= hojeSemHora;
+
+  return disponivel && naoPassou;
+};
 
   async salvarAgenda() {
 
@@ -197,7 +214,7 @@ export class AddAgendamentoColaboradorPage implements OnInit {
     });
     const data = await response.json();
 
-    if (data.status === 200) {
+    if (data.status === 200) { 
       // Limpa o formulário
       this.empresa_id = 0;
       this.profissionalSelecionado = 0;

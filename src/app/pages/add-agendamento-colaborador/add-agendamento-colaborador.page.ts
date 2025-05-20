@@ -14,7 +14,7 @@ export class AddAgendamentoColaboradorPage implements OnInit {
   public usuario_id: number = 0;
   public empresa_id: number = 0;
   public disponibilidade_id: number = 0;
-  intervalo: number=0;
+  intervalo: number = 0;
 
   datasDisponiveis: any[] = [];
   dataSelecionada: string | null = null;
@@ -71,12 +71,12 @@ export class AddAgendamentoColaboradorPage implements OnInit {
       }
     } catch (error) {
       this.profissionais = [];
-      this.presentToast('Erro ao conectar ao servidor.','danger');
+      this.presentToast('Erro ao conectar ao servidor.', 'danger');
     } finally {
       await loading.dismiss();
     }
   }
- 
+
   async onProfissionalChange() {
     this.datasDisponiveis = [];
     this.dataSelecionada = null;
@@ -165,72 +165,69 @@ export class AddAgendamentoColaboradorPage implements OnInit {
   };*/
 
   public isDateEnabled = (dateIsoString: string): boolean => {
-  const date = dateIsoString.split('T')[0];
-  const hoje = new Date();
-  const dataSelecionada = new Date(date);
+    const date = dateIsoString.split('T')[0]; // "YYYY-MM-DD"
+    const hoje = new Date();
 
-  // Força o horário para meia-noite para comparar apenas a data
-  const hojeSemHora = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+    // Corrige o erro de fuso: cria a data como local (ano, mês, dia)
+    const [ano, mes, dia] = date.split('-').map(Number);
+    const dataSelecionada = new Date(ano, mes - 1, dia); // mês começa em 0
 
-  // Verifica se a data está na lista de disponíveis
-  const disponivel = this.datasDisponiveis.some(d => d.data === date);
+    const disponivel = this.datasDisponiveis.some(d => d.data === date);
+    const naoPassou = dataSelecionada >= new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
 
-  // Permite datas de hoje em diante que estejam na lista
-  const naoPassou = dataSelecionada >= hojeSemHora;
-
-  return disponivel && naoPassou;
-};
+    return disponivel && naoPassou;
+  };
 
   async salvarAgenda() {
 
     if (
-    !this.empresa_id ||
-    !this.profissionalSelecionado ||
-    !this.dataSelecionada ||
-    !this.horarioSelecionado ||
-    !this.disponibilidade_id
-  ) {
-    this.presentToast('Preencha todos os campos obrigatórios e selecione pelo menos um horário.','warning');
-    return;
-  }
-
-  // Monta os dados conforme a endpoint espera
-  const payload = {
-    action: 'add_agendamento',
-    empresa_id: this.empresa_id,
-    profissional_id: this.profissionalSelecionado,
-    usuario_id: this.usuario_id,
-    disponibilidade_id: this.disponibilidade_id,
-    horario_id: this.horarioSelecionado,
-    intervalo: this.intervalo
-  };
-
-  try {
-    const response = await fetch('https://api.ergonomiquesaude.com.br/api/agenda/agenda.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      mode: 'cors',
-      body: JSON.stringify(payload)
-    });
-    const data = await response.json();
-
-    if (data.status === 200) { 
-      // Limpa o formulário
-      this.empresa_id = 0;
-      this.profissionalSelecionado = 0;
-      this.horarioSelecionado = '';
-      this.disponibilidade_id=0;
-      // Redireciona para a tela desejada (ajuste a rota conforme necessário)
-      this.presentToast(data.message,'success').then(() => {
-        this.router.navigate(['/listar-agendamentos-colaborador']);
-      });
-    } else {
-      this.presentToast(data.message || 'Erro ao salvar agendamento.','danger');
+      !this.empresa_id ||
+      !this.profissionalSelecionado ||
+      !this.dataSelecionada ||
+      !this.horarioSelecionado ||
+      !this.disponibilidade_id
+    ) {
+      this.presentToast('Preencha todos os campos obrigatórios e selecione pelo menos um horário.', 'warning');
+      return;
     }
-  } catch (error) {
-    this.presentToast('Erro ao conectar ao servidor.','danger');
+
+    // Monta os dados conforme a endpoint espera
+    const payload = {
+      action: 'add_agendamento',
+      empresa_id: this.empresa_id,
+      profissional_id: this.profissionalSelecionado,
+      usuario_id: this.usuario_id,
+      disponibilidade_id: this.disponibilidade_id,
+      horario_id: this.horarioSelecionado,
+      intervalo: this.intervalo
+    };
+
+    try {
+      const response = await fetch('https://api.ergonomiquesaude.com.br/api/agenda/agenda.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        mode: 'cors',
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json();
+
+      if (data.status === 200) {
+        // Limpa o formulário
+        this.empresa_id = 0;
+        this.profissionalSelecionado = 0;
+        this.horarioSelecionado = '';
+        this.disponibilidade_id = 0;
+        // Redireciona para a tela desejada (ajuste a rota conforme necessário)
+        this.presentToast(data.message, 'success').then(() => {
+          this.router.navigate(['/listar-agendamentos-colaborador']);
+        });
+      } else {
+        this.presentToast(data.message || 'Erro ao salvar agendamento.', 'danger');
+      }
+    } catch (error) {
+      this.presentToast('Erro ao conectar ao servidor.', 'danger');
+    }
   }
-  } 
 
   async presentAlert(msg: string) {
     const alert = await this.alertController.create({
